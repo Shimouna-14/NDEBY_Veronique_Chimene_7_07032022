@@ -3,14 +3,15 @@ const jwt = require("jsonwebtoken");
 const mysql = require("../middleware/db-mysql")
 
 exports.signup = (req, res) => {
-    if (!req.body.username || !req.body.email || !req.body.password) {{res.status(400).json({message : "Please to fill all the form !"})}} 
-    bcrypt.hash(req.body.password, 10, (err, hash) => {
-        let data = [req.body.username, req.body.email, hash, Date()]
-        mysql.query('INSERT INTO user (username, email, password, date) VALUES (?, ?, ?, CURRENT_TIMESTAMP())', data, (error) => {
-            if (error) {res.status(500).json({error})} 
-            res.status(201).json({message: "User created !"})
+    if (!req.body.username || !req.body.email || !req.body.password) {{res.status(400).json({message : "Please to fill all the form !"})}}
+    else {
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
+            mysql.query('INSERT INTO user (username, email, password, date) VALUES (?, ?, ?, CURRENT_TIMESTAMP())', [req.body.username, req.body.email, hash, Date()], (error) => {
+                if (error) {res.status(500).json({error})} 
+                res.status(201).json({message: "User created !"})
+            })
         })
-    });
+    }
 };
 
 exports.login = (req, res) => {
