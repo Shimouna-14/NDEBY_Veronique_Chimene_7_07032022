@@ -11,6 +11,10 @@ const Body = createGlobalStyle`
     input, button{
         font-size: 14px;
     }
+    a{
+        text-decoration: none;
+        color: black;
+    }
 `
 
 export default Body

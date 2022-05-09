@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import imageBg from '../../assets/EntreprisePhoto.jpg'
 import { Link } from 'react-router-dom'
 
-
 export const Image = styled.div`
     background-image: url(${imageBg});
     background-size: cover;
@@ -99,5 +98,4 @@ export const Button = styled.button`
 export const StyledLink = styled(Link)`
     font-size: 17px;
     color: white;
-    text-decoration: none;
 `

@@ -26,7 +26,6 @@ const StyledLink = styled(Link)`
     justify-content: space-around;
     color: #3f3d56;
     width: 200px;
-    text-decoration: none;
 `
 
 const P = styled.p`

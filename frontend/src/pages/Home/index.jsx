@@ -1,8 +1,11 @@
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faXmark, faImage, faThumbsUp, faThumbsDown, faCommentDots } from '@fortawesome/free-solid-svg-icons'
+import { faImage } from '@fortawesome/free-solid-svg-icons'
 import '../../styles/style.css'
 import Header from '../../components/Header'
+import PostContainer from '../../components/Home'
+import { useEffect, useState } from 'react'
+import Axios from 'axios'
 
 const Main = styled.main`
     display: flex;
@@ -54,7 +57,7 @@ const Input = styled.input`
         width: 200px;
     }
 `
-const BtnPost = styled.button`
+const Button = styled.button`
     border: 0;
     background-color: white;
     color: #C4CFAD;
@@ -65,6 +68,7 @@ const BtnPost = styled.button`
     justify-content: space-around;
     border-radius: 25px;
     padding: 0 1%;
+    cursor: pointer;
 `
 
 const AllPost = styled.div`
@@ -73,122 +77,61 @@ const AllPost = styled.div`
     align-items: center;
 `
 
-const Publication = styled.article`
-    width: 88%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-    margin-bottom: 40px;
-    padding: 20px 5%;
-`
-
-const UserPost = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-`
-
-const Like = styled.div`
-    margin: 16px 0;
-    display: flex;
-    justify-content: space-between;
-    width: 110px;
-`
-
-const Comment = styled.input`
-    width: 96%;
-    height: 25px;
-    padding-left: 20px;
-    border-radius: 20px;
-    border: 1px solid black;
-    background-color: #F4F4F4;
-    @media screen and (max-width: 575px) {
-        width: 93%;
-    }
-`
-
-const Notif = styled.section`
-    width: 23%;
-    background-color: #C4CFAD;
-    height: 60%;
-    border-radius: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: scroll;
-    scrollbar-width: none;
-    @media screen and (max-width: 1023px) and (min-width: 546px) {
-        display: none;
-    }
-    @media screen and (max-width: 575px) {
-        display: none;
-    }
-`
-
-const NotifPost = styled.div`
-    display: flex;
-    align-items: center;
-    background-color: #C4CFAD;
-    box-shadow: 0px 6px 16px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
-    width: 90%;
-    height: 70px;
-    margin-bottom: 20px;
-    padding: 10px 0;
-`
-
 function Home() {
+    const [postList, setPostList] = useState([])
+    useEffect(() => {
+        fetch(`http://localhost:8000/api/home`)
+            .then((response) => response.json())
+            .then((postList) => {setPostList(postList)})
+            .catch((error) => console.log(error))
+    }, []);
+
+    const [image, setImage] = useState()
+    const [description, setDescription] = useState("")
+    const createPost = () => {
+        Axios.post('http://localhost:8000/api/home', {
+            description: description, 
+            image: image
+        })
+        .then(() => window.location.reload())
+        .catch((error) => console.log(error))
+    };
+
     return (
         <div>
             <Header />
             <Main>
                 <Post>
                     <CreatePost>
-                        <Form action="">
-                            <Input type="text" id="post" name="post" placeholder='Post something...' />  
-                            <label className='labelfile' htmlFor="file"><FontAwesomeIcon icon={faImage} size="2x" /></label>  
-                            <input className='inputfile' type="file" name="file" id="file" />
-                            <BtnPost>Post</BtnPost>
+                        <Form>
+                            <label htmlFor="description">
+                                <Input type="text" name="description" id="description" placeholder='Post something...' onChange={(event) => {setDescription(event.target.value)}} required/>  
+                            </label>
+                            <label htmlFor='file'>
+                                <FontAwesomeIcon icon={faImage} size="2x" />
+                                <input type="file" id='file' onChange={(event) => {setImage(event.target.value)}} />
+                            </label>  
+                            <Button type="button" onClick={createPost}>Post</Button>
                         </Form>
                     </CreatePost>
 
                     <h1>Lasted post</h1>
                     <AllPost>
-                        <Publication>
-                            <UserPost>
-                                <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
-                                <div>
-                                    <p className='paddingUsernameDate'>Lorem ipsum</p>
-                                    <p className='paddingUsernameDate'>Published on 12/02/22 at 12:25</p>
-                                </div>
-                            </UserPost>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi accusamus quidem voluptates voluptatem quasi esse adipisci veniam repellat, officiis exercitationem, amet nesciunt inventore enim aliquid, tempore dolore quo animi perspiciatis.</p>
-                            <div className='img'></div>
-                            <Like>
-                                <FontAwesomeIcon icon={faThumbsUp} size="xl" />
-                                <FontAwesomeIcon icon={faThumbsDown} size="xl" />
-                                <FontAwesomeIcon icon={faCommentDots} size="xl" />
-                            </Like>
-                            <Comment type="text" placeholder='Comments...'/>
-                        </Publication>
+                        {postList.map((post) => (
+                            <PostContainer
+                                key={post.id}
+                                postId={post.id}
+                                username={post.username}
+                                date={post.date}
+                                imageUrl={post.image}
+                                description={post.description}
+                            />
+                        ))}
                     </AllPost>
                 </Post>
-                <Notif>
-                    <h2>Notifications</h2>
-                    <NotifPost>
-                        <FontAwesomeIcon icon={faXmark} size="lg" />
-                        <FontAwesomeIcon className='userNotif' icon={faUserCircle} size="3x" />
-                        <p>Lorum ipsum likes your post</p>
-                    </NotifPost>
-
-                    <NotifPost>
-                        <FontAwesomeIcon icon={faXmark} size="lg" />
-                        <FontAwesomeIcon className='userNotif' icon={faUserCircle} size="3x" />
-                        <p>Lorum ipsum Lorum ipsum comment your post</p>
-                    </NotifPost>
-                </Notif>
             </Main>
         </div>
     )
-}
+};
 
 export default Home;

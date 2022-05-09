@@ -4,7 +4,8 @@ import longlogo from '../../assets/icon-left-font-monochrome-white.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import '../../styles/style.css'
-import { faUserCircle, faSearch, faPlus, faBell, faGear, faPowerOff} from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faPlus }  from '@fortawesome/free-solid-svg-icons'
+import Params from '../Params'
 
 const Nav = styled.nav`
     background-color: #C4CFAD;
@@ -84,36 +85,11 @@ const BtnCreateMobile = styled.button`
     }
 `
 
-const BellMobile = styled.div`
-    display: none;
-    @media screen and (max-width: 1023px) and (min-width: 546px) {
-        display: initial;
-    
-    }
-    @media screen and (max-width: 575px) {
-        display: initial;
-    }
-`
-
-// const Setting = styled.div`
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     position: absolute;
-//     width: 219px;
-//     box-shadow: 0px 13px 16px 5px rgba(0, 0, 0, 0.1);
-//     border-radius: 20px;
-//     background-color: #C4CFAD;
-//     top: 85px;
-//     right: 0;
-//     display: none;
-// `
-
 function Header() {
     return (
         <header>
             <Nav>
-                <Link to='/api/home'>
+                <Link to='/home'>
                     <Icon src={logo} alt="Logo Groupomania"/>
                     <LongIcon src={longlogo} alt="Logo Groupomania" />
                 </Link>
@@ -123,13 +99,7 @@ function Header() {
                 </div>
                 <BtnCreate><FontAwesomeIcon icon={faPlus} /> Create</BtnCreate>
                 <BtnCreateMobile><FontAwesomeIcon icon={faPlus} /></BtnCreateMobile>
-                <BellMobile><FontAwesomeIcon icon={faBell} size="lg"/></BellMobile>
-                <FontAwesomeIcon className='user' icon={faUserCircle} size="2x" />
-                <div className='setting'>
-                    <h3>@Lorem ipsum</h3>
-                    <p><FontAwesomeIcon icon={faGear} /> Setting </p>
-                    <p><FontAwesomeIcon icon={faPowerOff} /> Log out </p>
-                </div>
+                <Params />
             </Nav>
         </header>
     )
