@@ -6,6 +6,7 @@ import Header from '../../components/Header'
 import PostContainer from '../../components/Home'
 import { useEffect, useState } from 'react'
 import Axios from 'axios'
+import { useForm } from 'react-hook-form'
 
 const Main = styled.main`
     display: flex;
@@ -13,7 +14,7 @@ const Main = styled.main`
 `
 
 const Post = styled.section`
-    width: 55%;
+    width: 75%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -29,11 +30,14 @@ const Post = styled.section`
 const CreatePost = styled.div`
     background-color: #C4CFAD;
     width: 100%;
-    height: 85px;
+    height: 100px;
     border-radius: 20px;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    @media screen and (max-width: 575px) {
+        height: 200px;
+    }
 `
 
 const Form = styled.form`
@@ -42,19 +46,33 @@ const Form = styled.form`
     justify-content: space-around;
     align-items: center;
     width: 90%;
+    @media screen and (max-width: 575px) {
+        flex-direction: column;
+    }
 `
 
-const Input = styled.input`
+const Description = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @media screen and (max-width: 575px) {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+`
+
+const Input = styled.textarea`
+    resize: none;
     border: none;
     border-radius: 25px;
-    padding-left: 20px;
-    width: 350px;
-    height: 40px;
+    padding: 5px 20px;
+    width: 400px;
+    height: 50px;
     @media screen and (max-width: 1023px) and (min-width: 546px) {
         width: 250px;
     }
     @media screen and (max-width: 575px) {
-        width: 200px;
+        width: 80%;
     }
 `
 const Button = styled.button`
@@ -69,52 +87,69 @@ const Button = styled.button`
     border-radius: 25px;
     padding: 0 1%;
     cursor: pointer;
+    @media screen and (max-width: 575px) {
+        width: 30%;
+        height: 40px;
+        margin-top: 15px;
+    }
 `
 
 const AllPost = styled.div`
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
+    width: 85%;
+
 `
 
 function Home() {
+    let token = JSON.parse(localStorage.getItem("jwt_G"))
     const [postList, setPostList] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/home`)
+        fetch('http://localhost:8000/api/home', {
+            headers: { 'Authorization': `token ${token}` }
+        })
             .then((response) => response.json())
             .then((postList) => {setPostList(postList)})
             .catch((error) => console.log(error))
     }, []);
 
-    const [image, setImage] = useState()
-    const [description, setDescription] = useState("")
-    const createPost = () => {
-        Axios.post('http://localhost:8000/api/home', {
-            description: description, 
-            image: image
+    const [image, setImage] = useState(null)
+    const { register, handleSubmit, formState: { errors } } = useForm()
+    const createPost = (data) => {
+        const formData = new FormData();
+        formData.append("image", image)
+        formData.append("description", data.description)
+        Axios.post('http://localhost:8000/api/home', formData, {
+            headers: { 
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `token ${token}`            
+            }
         })
         .then(() => window.location.reload())
         .catch((error) => console.log(error))
     };
 
+    const handleImage = (event) => { setImage(event.target.files[0]) }
+
     return (
-        <div>
+        <>
             <Header />
             <Main>
                 <Post>
                     <CreatePost>
-                        <Form>
-                            <label htmlFor="description">
-                                <Input type="text" name="description" id="description" placeholder='Post something...' onChange={(event) => {setDescription(event.target.value)}} required/>  
-                            </label>
+                        <Form onSubmit={handleSubmit(createPost)}>
+                            <Description>
+                                <Input type="text" placeholder='Post something...' {...register('description', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
+                                {errors.description && <span>Write a description</span>}
+                            </Description>
                             <label htmlFor='file'>
-                                <FontAwesomeIcon icon={faImage} size="2x" />
-                                <input type="file" id='file' onChange={(event) => {setImage(event.target.value)}} />
+                                <FontAwesomeIcon icon={faImage} size="2x"/>
+                                <input type="file" id='file' onChange={handleImage}/>
                             </label>  
-                            <Button type="button" onClick={createPost}>Post</Button>
+                            <Button type="submit">Post</Button>
                         </Form>
                     </CreatePost>
-
                     <h1>Lasted post</h1>
                     <AllPost>
                         {postList.map((post) => (
@@ -123,14 +158,14 @@ function Home() {
                                 postId={post.id}
                                 username={post.username}
                                 date={post.date}
-                                imageUrl={post.image}
+                                picture={post.image}
                                 description={post.description}
                             />
                         ))}
                     </AllPost>
                 </Post>
             </Main>
-        </div>
+        </>
     )
 };
 

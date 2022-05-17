@@ -3,7 +3,7 @@ import '../../styles/style.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types'
-import DefaultPicture from '../../assets/profile.png'
+// import DefaultPicture from '../../assets/profile.png'
 import { Link } from 'react-router-dom'
 
 const Publication = styled.article`
@@ -11,13 +11,18 @@ const Publication = styled.article`
     border-radius: 20px;
     margin-bottom: 40px;
     padding: 20px 5%;
-    width: 88%;
+    width: 100%;
 `
 
 const UserPost = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+`
+
+const CenterImg = styled.div`
+    display: flex;
+    justify-content: center;
 `
 
 function PostContainer ({ postId, username, date, picture, description }) {
@@ -34,7 +39,9 @@ function PostContainer ({ postId, username, date, picture, description }) {
             </Link>
             <Link to={`/status/${postId}`}>
                 <p>{description}</p>
-                <img src={picture} alt=""/>
+                {picture ? (
+                    <CenterImg><img className='post-img' src={picture} alt=""/></CenterImg>
+                ) : (null)}
             </Link>
         </Publication>
     )

@@ -3,28 +3,60 @@ import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import '../../styles/style.css'
 import logo from '../../assets/icon.png'
 import { Image, Sign, Icon, H1, H2, Form, Label, IconForm, Input, Button, StyledLink } from '../../components/SignupLogin'
+import Axios from 'axios'
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 function Login() {
+    const { register, handleSubmit, formState: { errors } } = useForm()
+    const [error, setError] = useState(false)
+
+    const sign = (data) => {
+        Axios.post('http://localhost:8000/api/auth/login', {
+            email: data.email,
+            password: data.password
+        })
+        .then((response) => response.data)
+        .then((response) => {
+            let token = JSON.parse(localStorage.getItem("jwt_G"))
+            token = []
+            token.push(response.token)
+            localStorage.setItem("jwt_G", JSON.stringify(token))
+
+            let userData = JSON.parse(localStorage.getItem("userData"))
+            let data = {userId: response.userId, username: response.username}
+            userData = []
+            userData.push(data)
+            localStorage.setItem("userData", JSON.stringify(data))
+        })
+        .then(() => window.location = "/home")
+        .catch(() => setError(true))
+    }
+
     return(
         <Image>
-            <Sign>
+            <Sign onSubmit={handleSubmit(sign)}>
                 <Icon src={logo} alt="Logo Groupomania" />
                 <H1>Welcome back to Groupomania</H1>
                 <H2>Login</H2>
+                {error ? (
+                    <span>The email or password are incorrect</span>
+                ) : (null)}
                 <Form>
-
                     <Label htmlFor="email"> 
                         <IconForm><FontAwesomeIcon icon={faEnvelope} size="xl"/></IconForm> 
-                        <Input type="email" name="email" id="email" placeholder="Email" required/>
+                        <Input type="email" placeholder="Email" {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
+                        {errors.email && <span>Please to fill your email </span>}
                     </Label>
 
                     <Label htmlFor="password"> 
                         <IconForm><FontAwesomeIcon icon={faLock} size="xl"/></IconForm> 
-                        <Input type="password" name="password" id="password" placeholder="Password" required/>
+                        <Input type="password" placeholder="Password" {...register('password', { required: true, minLength: '8' })}/>
+                        {errors.password && <span>Please to fill your password</span>}
                     </Label>                    
-                    <Button>Connexion</Button>
+                    <Button type="submit">Connexion</Button>
                 </Form>
-                <StyledLink to="/api/auth/signup">Create account</StyledLink>
+                <StyledLink to="/auth/signup">Create account</StyledLink>
             </Sign>
         </Image>
     )

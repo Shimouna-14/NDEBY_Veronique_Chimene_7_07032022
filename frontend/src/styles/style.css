@@ -1,12 +1,14 @@
 /* Icon */
-.fa-user, .fa-envelope, .fa-lock, .fa-circle-user, .fa-bell, .fa-xmark, .fa-image {color: white;}
+.fa-user, .fa-envelope, .fa-lock, .fa-circle-user, .fa-image {color: white;}
 .fa-magnifying-glass {
     color: #AAA;
     position: relative;
     left: 30px;
 }
-.fa-trash{color: #D05757;}
-.fa-image, .user {cursor: pointer;}
+.fa-trash{
+    color: #D05757;
+}
+.fa-image, .user, .fa-trash{cursor: pointer;}
 .user:hover + .setting{
     display: flex;
 }
@@ -16,8 +18,6 @@
     /* height: 51px;
     width: 51px; */
 }
-.fa-xmark{margin-left: 10px;}
-.userNotif{margin: 0 15px;}
 
 .fa-thumbs-up, .fa-thumbs-down, .fa-comment-dots{
     padding: 0 6px 0 15px;
@@ -34,10 +34,17 @@
     font-size: 20px;
 }
 .paddingUsernameDate{
-    margin: 0;
+    margin: 5px 0;
+    white-space: pre-wrap;
 }
 
-/*  */
+.post-img{
+    object-fit: contain;
+    width: 100%;
+}
+
+#commentId{display: none;}
+
 #file{
     width: 0.1px;
 	height: 0.1px;

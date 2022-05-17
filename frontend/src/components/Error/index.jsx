@@ -39,7 +39,7 @@ function Error() {
         <Main>
             <Img src={illustration} alt="Moon"/>
             <H1>This page is missing or the link is incorrect</H1>
-            <StyledLink to='/api/home'>
+            <StyledLink to='/home'>
                 <P>Back to the home</P>
                 <FontAwesomeIcon icon={faArrowRight} />
             </StyledLink>

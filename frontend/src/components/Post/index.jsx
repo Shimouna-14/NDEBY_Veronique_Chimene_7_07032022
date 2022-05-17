@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faThumbsUp, faThumbsDown, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types'
 // import DefaultPicture from '../../assets/profile.png'
 import { Link, useParams } from 'react-router-dom';
 import { useState } from "react";
 import Axios from "axios";
+import { useForm } from 'react-hook-form'
 
 const Publication = styled.article`
-    width: 70%;
+    width: 65%;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
     margin-bottom: 40px;
@@ -18,8 +19,18 @@ const Publication = styled.article`
         width: 75%;
     }
     @media screen and (max-width: 575px) {
-        width: 75%;
+        width: 80%;
     }
+`
+
+const Div = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const StyledLink = styled(Link)`
+    width: auto;
 `
 
 const UserPost = styled.div`
@@ -27,9 +38,25 @@ const UserPost = styled.div`
     flex-direction: row;
     align-items: center;
 `
-const StyledLink = styled(Link)`
-    width: 100%;
+
+const Icon = styled.div`
+    width: 75px;
+    margin-left: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @media screen and (max-width: 575px) {
+        flex-direction: column;
+        margin-left: 25px;
+        height: 55px;
+    }
 `
+
+const CenterImg = styled.div`
+    display: flex;
+    justify-content: center;
+`
+
 const Form = styled.form`
     display: flex;
     justify-content: space-around;
@@ -53,11 +80,21 @@ const LikeContainer = styled.div`
     align-items: center;
 `
 
-function OnePost({ username, date, picture, description, like, dislike }) {
+function OnePost({ userId, username, date, picture, description, like, dislike }) {
     const { id: postId } = useParams()
+    let userData = JSON.parse(localStorage.getItem("userData"))
+    let token = JSON.parse(localStorage.getItem("jwt_G"))
     const [likeActive, setLikeActive] = useState(false)
     const [dislikeActive, setDislikeActive] = useState(false)
-    
+
+    const deleted = () => {
+        Axios.delete(`http://localhost:8000/api/home/status/${postId}`, {
+            headers: { 'Authorization': `token ${token}` }
+        })
+        .then(() => window.location = "/home")
+        .catch((error) => console.log(error))
+    }
+
     function handleLike() {
         if (likeActive) {
             setLikeActive(false)
@@ -90,9 +127,11 @@ function OnePost({ username, date, picture, description, like, dislike }) {
 
     const liked = () => {
         Axios.post(`http://localhost:8000/api/home/status/${postId}/like`, {
-            likes: like ? 0 : 1,
-            username: "test2",
-            userId: 61
+            likes: like ? 0 : 1          
+        }, {
+            headers: { 
+                'Authorization': `token ${token}`
+            }
         })
         .then(() => handleLike())
         .then(() => window.location.reload())
@@ -101,54 +140,70 @@ function OnePost({ username, date, picture, description, like, dislike }) {
     
     const disliked = () => {
         Axios.post(`http://localhost:8000/api/home/status/${postId}/like`, {
-            dislikes: dislike ? 0 : -1,
-            username: "test2",
-            userId: 61
+            dislikes: dislike ? 0 : -1
+        }, {
+            headers: { 
+                'Authorization': `token ${token}`
+            }
         })
         .then(() => handleDislike())
         .then(() => window.location.reload())
         .catch((error) => console.log(error))
     }
 
-    const [comment, setComment] = useState("")
-    const createComment = () => {
+    const { register, handleSubmit, formState: { errors } } = useForm()
+    const createComment = (data) => {
         Axios.post(`http://localhost:8000/api/home/status/${postId}/comments`, {
-            comment: comment,
-            username: "test2",
-            userId: 61
+            comment: data.comment
+        }, {
+            headers: { 
+                'Authorization': `token ${token}`            
+            }
         })
         .then(() => window.location.reload())
-        .catch((error) => console.log(error))
+        .catch((error) => console.log(error))    
     }
 
     return(
         <Publication>
-            <StyledLink to={`/profile/${username}`} >
-                <UserPost>
-                    <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
-                    <div>
-                        <p className='paddingUsernameDate'>{username}</p>
-                        <p className='paddingUsernameDate'>Published on {date}</p>
-                    </div>
-                </UserPost>
-            </StyledLink>
+            <Div>
+                <StyledLink to={`/profile/${username}`}>
+                    <UserPost>
+                        <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
+                        <div>
+                            <p className='paddingUsernameDate'>{username}</p>
+                            <p className='paddingUsernameDate'>Published on {date}</p>
+                        </div>
+                    </UserPost>
+                </StyledLink>
+                { userId === userData.userId ? (
+                    <Icon>
+                        <Link to={`/update/${postId}`}><FontAwesomeIcon icon={faPen} size="lg"/></Link>
+                        <FontAwesomeIcon icon={faTrash} size="lg" onClick={deleted} />
+                    </Icon>
+                ) : (null)}
+            </Div>
             <p>{description}</p>
-            <div className='img'><img src={picture} alt=""/></div>
+            { picture ? (
+                <CenterImg><img className='post-img' src={picture} alt=""/></CenterImg>
+            ) : (null)}
             <LikeContainer>
                 <FontAwesomeIcon icon={faThumbsUp} size="xl" onClick={liked} />
                 <p>{like}</p>
                 <FontAwesomeIcon icon={faThumbsDown} size="xl" onClick={disliked} />
                 <p>{dislike}</p>
             </LikeContainer>    
-            <Form>
-                <Comment type="text" placeholder='Comments...' onChange={(event) => {setComment(event.target.value)}} required/>
-                <button type="button" onClick={createComment}>Comments</button>
+            <Form onSubmit={handleSubmit(createComment)}>
+                <Comment type="text" placeholder='Comments...' {...register('comment', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
+                <button type="submit">Comment</button>
             </Form>
+            {errors.comment && <span>Write a comment</span>}
         </Publication>
     )
 };
 
 OnePost.prototype = {
+    userId: PropTypes.string.isRequired, 
     username: PropTypes.string.isRequired, 
     date: PropTypes.instanceOf(Date).isRequired, 
     picture: PropTypes.string.isRequired,
@@ -158,6 +213,7 @@ OnePost.prototype = {
 }
 
 OnePost.defaultProps = {
+    userId: "", 
     username: "", 
     date: "", 
     picture: "", 

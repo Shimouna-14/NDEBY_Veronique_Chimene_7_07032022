@@ -1,12 +1,20 @@
 import styled from "styled-components";
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import Axios from "axios";
 
 const CommentContainer = styled.div`
-    width: 65%;
+    width: 55%;
+    padding: 0 3%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    margin-bottom: 10px;
+    padding: 20px 5%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    flex-direction: column;
     @media screen and (max-width: 1023px) and (min-width: 546px) {
         width: 65%;
     }
@@ -14,34 +22,53 @@ const CommentContainer = styled.div`
         width: 70%;
     }
 `
-const CommentUser = styled.div`
-    width: 100%;
-    padding: 0 3%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-    margin-bottom: 10px;
-    padding: 20px 5%;
+
+const Content = styled.div`
+    width: 95%;
 `
 
-function Comment({comment, user}) {
+function Comment({comment, userId, username, commentId}) {
+    let token = JSON.parse(localStorage.getItem("jwt_G"))
+    let userData = JSON.parse(localStorage.getItem("userData"))
+
+    const deleted = () => {
+        Axios.delete(`http://localhost:8000/api/home/comments/${commentId}`, {
+            headers: { 'Authorization': `token ${token}` }
+        })
+        .then(() => 
+            window.location.reload()
+        )
+        .catch((error) => console.log(error))
+    }
+    
     return(
         <CommentContainer>
-            <CommentUser>
-                <Link to={`/api/profile/${user}`}><p>{user}</p></Link>
-                <p>{comment}</p>   
-            </CommentUser>
+                <Content>
+                    <Link to={`/profile/${username}`}><p>{username}</p></Link>
+                    <p>{comment}</p>
+                </Content>
+                    { userId === userData.userId ? (
+                        <div>
+                            <p id="commentId">{commentId}</p>
+                            <FontAwesomeIcon icon={faTrash} size="xl" onClick={deleted}/>
+                        </div>
+                    ) : (null)}
         </CommentContainer>
     )
 };
 
 Comment.prototype = {
-    user: PropTypes.string.isRequired,
-    comments : PropTypes.string.isRequired
+    userId: PropTypes.string.isRequired, 
+    username: PropTypes.string.isRequired,
+    comment : PropTypes.string.isRequired,
+    commentId : PropTypes.string.isRequired
 }
 
 Comment.defaultProps = {
-    user: "",
-    comment: ""
+    userId: "", 
+    username: "",
+    comment: "",
+    commentId: ""
 }
 
 export default Comment;

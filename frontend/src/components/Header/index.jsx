@@ -4,7 +4,7 @@ import longlogo from '../../assets/icon-left-font-monochrome-white.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import '../../styles/style.css'
-import { faSearch, faPlus }  from '@fortawesome/free-solid-svg-icons'
+import { faSearch }  from '@fortawesome/free-solid-svg-icons'
 import Params from '../Params'
 
 const Nav = styled.nav`
@@ -57,35 +57,7 @@ const Search = styled.input`
     }
 `
 
-const BtnCreate = styled.button`
-    border: 0;
-    background-color: white;
-    color: #C4CFAD;
-    height: 30px;
-    width: 85px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    border-radius: 25px;
-    padding: 0 1%;
-    @media screen and (max-width: 575px) {
-        display: none;
-    }
-`
-const BtnCreateMobile = styled.button`
-    display: none;
-    @media screen and (max-width: 575px) {
-        display: initial;
-        border: 0;
-        background-color: white;
-        color: #C4CFAD;
-        border-radius: 20px;
-        height: 30px;
-        width: 30px;
-    }
-`
-
-function Header() {
+function Header() {       
     return (
         <header>
             <Nav>
@@ -97,8 +69,6 @@ function Header() {
                     <FontAwesomeIcon icon={faSearch} size="lg" />
                     <Search placeholder='Search something...' />
                 </div>
-                <BtnCreate><FontAwesomeIcon icon={faPlus} /> Create</BtnCreate>
-                <BtnCreateMobile><FontAwesomeIcon icon={faPlus} /></BtnCreateMobile>
                 <Params />
             </Nav>
         </header>

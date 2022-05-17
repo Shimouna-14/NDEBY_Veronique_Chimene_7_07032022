@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site"}}));
 app.use("/api/auth", userRoutes);
 app.use("/api/home", postRoutes);
 app.use("/api/profile", profileRoutes);

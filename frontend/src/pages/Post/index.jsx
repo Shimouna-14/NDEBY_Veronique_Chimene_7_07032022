@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ContainerPost from "../../components/Post";
 import ContainerComment from "../../components/Comment";
+import Error from '../../components/Error'
 
 const Main = styled.main`
     display: flex;
@@ -13,29 +14,36 @@ const Main = styled.main`
 
 function Post() {
     const { id: postId } = useParams()
+    let token = JSON.parse(localStorage.getItem("jwt_G"))
+
     const [postData, setPostData] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/home/status/${postId}`)
+        fetch(`http://localhost:8000/api/home/status/${postId}`, {
+            headers: { 'Authorization': `token ${token}` }
+        })
             .then((response) => response.json())
             .then((postData) => {setPostData(postData)})
-            .catch((error) => console.log(error))
+            .catch(() => window.location = '/error')
     }, [postId])
 
     const [commentList, setcommentList] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/home/status/${postId}/comments`)
+        fetch(`http://localhost:8000/api/home/status/${postId}/comments`, {
+            headers: { 'Authorization': `token ${token}` }
+        })
             .then((response) => response.json())
             .then((commentList) => {setcommentList(commentList)})
             .catch((error) => console.log(error))
     }, [postId])
 
     return(
-        <div>
+        <>
             <Header />
             <Main>
                 {postData.map((post) => (
                     <ContainerPost
                         key={post.id}
+                        userId={post.userId}
                         username={post.username}
                         date={post.date}
                         picture={post.image}
@@ -44,15 +52,17 @@ function Post() {
                         dislike={post.dislikes}
                     />
                 ))}
-                {commentList.map((post) => (
+                {commentList.map((comment) => (
                     <ContainerComment 
-                        key={-post.commentId}
-                        user={post.username}
-                        comment={post.comment}
+                        key={comment.id}
+                        userId={comment.userId}
+                        username={comment.username}
+                        comment={comment.comment}
+                        commentId={comment.id}
                     />
                 ))}
             </Main>
-        </div>
+        </>
     )
 }
 
