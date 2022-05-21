@@ -3,7 +3,6 @@ import '../../styles/style.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types'
-// import DefaultPicture from '../../assets/profile.png'
 import { Link } from 'react-router-dom'
 
 const Publication = styled.article`
@@ -25,10 +24,10 @@ const CenterImg = styled.div`
     justify-content: center;
 `
 
-function PostContainer ({ postId, username, date, picture, description }) {
+export function ContainerPost ({ postId, username, userId ,date, picture, description }) {
     return(
         <Publication>
-            <Link to={`/profile/${username}`}>
+            <Link to={`/profile/${userId}`}>
                 <UserPost>
                     <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
                     <div>
@@ -47,20 +46,60 @@ function PostContainer ({ postId, username, date, picture, description }) {
     )
 };
 
-PostContainer.prototype = {
-    postId: PropTypes.string.isRequired, 
-    username: PropTypes.string.isRequired,    
-    date: PropTypes.instanceOf(Date).isRequired, 
+ContainerPost.prototype = {
+    postId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
+    date: PropTypes.instanceOf(Date).isRequired,
     description: PropTypes.string.isRequired,
     picture: PropTypes.string.isRequired
 };
 
-PostContainer.defaultProps = {
+ContainerPost.defaultProps = {
     postId: "",
     username: "",
-    date: "", 
+    userId: "",
+    date: "",
     description: "",
     picture: ""
 };
 
-export default PostContainer
+export function ContainerAdminPost ({ postId, username, userId ,date, picture, description }) {
+    return(
+        <Publication>
+            <Link to={`/admin/profile/${userId}`}>
+                <UserPost>
+                    <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
+                    <div>
+                        <p className='paddingUsernameDate'>{username}</p>
+                        <p className='paddingUsernameDate'>Published on {date}</p>
+                    </div>
+                </UserPost>
+            </Link>
+            <Link to={`/admin/status/${postId}`}>
+                <p>{description}</p>
+                {picture ? (
+                    <CenterImg><img className='post-img' src={picture} alt=""/></CenterImg>
+                ) : (null)}
+            </Link>
+        </Publication>
+    )
+};
+
+ContainerAdminPost.prototype = {
+    postId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
+    date: PropTypes.instanceOf(Date).isRequired,
+    description: PropTypes.string.isRequired,
+    picture: PropTypes.string.isRequired
+};
+
+ContainerAdminPost.defaultProps = {
+    postId: "",
+    username: "",
+    userId: "",
+    date: "",
+    description: "",
+    picture: ""
+};

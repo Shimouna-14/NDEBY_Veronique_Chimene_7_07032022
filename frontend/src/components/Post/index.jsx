@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle, faThumbsUp, faThumbsDown, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types'
-// import DefaultPicture from '../../assets/profile.png'
 import { Link, useParams } from 'react-router-dom';
 import { useState } from "react";
 import Axios from "axios";
@@ -80,7 +79,7 @@ const LikeContainer = styled.div`
     align-items: center;
 `
 
-function OnePost({ userId, username, date, picture, description, like, dislike }) {
+export function OnePost({ userId, username, date, picture, description, like, dislike }) {
     const { id: postId } = useParams()
     let userData = JSON.parse(localStorage.getItem("userData"))
     let token = JSON.parse(localStorage.getItem("jwt_G"))
@@ -93,7 +92,7 @@ function OnePost({ userId, username, date, picture, description, like, dislike }
         })
         .then(() => window.location = "/home")
         .catch((error) => console.log(error))
-    }
+    };
 
     function handleLike() {
         if (likeActive) {
@@ -108,11 +107,11 @@ function OnePost({ userId, username, date, picture, description, like, dislike }
                 dislike = dislike - 1
             }
         }
-    }
+    };
 
     function handleDislike() {
         if (dislikeActive) {
-            setDislikeActive(false)     
+            setDislikeActive(false)
             dislike = dislike - 1
         } else {
             setDislikeActive(true)
@@ -123,51 +122,51 @@ function OnePost({ userId, username, date, picture, description, like, dislike }
                 like = like - 1
             }
         }
-    }
+    };
 
     const liked = () => {
         Axios.post(`http://localhost:8000/api/home/status/${postId}/like`, {
-            likes: like ? 0 : 1          
+            likes: like ? 0 : 1
         }, {
-            headers: { 
+            headers: {
                 'Authorization': `token ${token}`
             }
         })
         .then(() => handleLike())
         .then(() => window.location.reload())
         .catch((error) => console.log(error))
-    }
-    
+    };
+
     const disliked = () => {
         Axios.post(`http://localhost:8000/api/home/status/${postId}/like`, {
             dislikes: dislike ? 0 : -1
         }, {
-            headers: { 
+            headers: {
                 'Authorization': `token ${token}`
             }
         })
         .then(() => handleDislike())
         .then(() => window.location.reload())
         .catch((error) => console.log(error))
-    }
+    };
 
     const { register, handleSubmit, formState: { errors } } = useForm()
     const createComment = (data) => {
         Axios.post(`http://localhost:8000/api/home/status/${postId}/comments`, {
             comment: data.comment
         }, {
-            headers: { 
-                'Authorization': `token ${token}`            
+            headers: {
+                'Authorization': `token ${token}`
             }
         })
         .then(() => window.location.reload())
-        .catch((error) => console.log(error))    
+        .catch((error) => console.log(error))
     }
 
     return(
         <Publication>
             <Div>
-                <StyledLink to={`/profile/${username}`}>
+                <StyledLink to={`/profile/${userId}`}>
                     <UserPost>
                         <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
                         <div>
@@ -192,7 +191,7 @@ function OnePost({ userId, username, date, picture, description, like, dislike }
                 <p>{like}</p>
                 <FontAwesomeIcon icon={faThumbsDown} size="xl" onClick={disliked} />
                 <p>{dislike}</p>
-            </LikeContainer>    
+            </LikeContainer>
             <Form onSubmit={handleSubmit(createComment)}>
                 <Comment type="text" placeholder='Comments...' {...register('comment', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
                 <button type="submit">Comment</button>
@@ -203,9 +202,9 @@ function OnePost({ userId, username, date, picture, description, like, dislike }
 };
 
 OnePost.prototype = {
-    userId: PropTypes.string.isRequired, 
-    username: PropTypes.string.isRequired, 
-    date: PropTypes.instanceOf(Date).isRequired, 
+    userId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    date: PropTypes.instanceOf(Date).isRequired,
     picture: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     like: PropTypes.number.isRequired,
@@ -213,13 +212,74 @@ OnePost.prototype = {
 }
 
 OnePost.defaultProps = {
-    userId: "", 
-    username: "", 
-    date: "", 
-    picture: "", 
+    userId: "",
+    username: "",
+    date: "",
+    picture: "",
     description: "",
     like: 0,
     dislike: 0
 }
 
-export default OnePost;
+export function OnePostAdmin({ userId, username, date, picture, description, like, dislike }) {
+    const { id: postId } = useParams()
+    let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
+
+    const deleted = () => {
+        Axios.delete(`http://localhost:8000/api/admin/status/${postId}`, {
+            headers: { 'Authorization': `token ${token}` }
+        })
+        .then(() => window.location = "/admin/home")
+        .catch((error) => console.log(error))
+    };
+    return(
+        <Publication>
+            <Div>
+                <StyledLink to={`/admin/profile/${userId}`}>
+                    <UserPost>
+                        <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
+                        <div>
+                            <p className='paddingUsernameDate'>{username}</p>
+                            <p className='paddingUsernameDate'>Published on {date}</p>
+                        </div>
+                    </UserPost>
+                </StyledLink>
+                { token ? (
+                    <>
+                        <FontAwesomeIcon icon={faTrash} size="lg" onClick={deleted} />
+                    </>
+                ) : (null)}
+            </Div>
+            <p>{description}</p>
+            { picture ? (
+                <CenterImg><img className='post-img' src={picture} alt=""/></CenterImg>
+            ) : (null)}
+            <LikeContainer>
+                <FontAwesomeIcon icon={faThumbsUp} size="xl" />
+                <p>{like}</p>
+                <FontAwesomeIcon icon={faThumbsDown} size="xl" />
+                <p>{dislike}</p>
+            </LikeContainer>
+        </Publication>
+    )
+};
+
+OnePostAdmin.prototype = {
+    userId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    date: PropTypes.instanceOf(Date).isRequired,
+    picture: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    like: PropTypes.number.isRequired,
+    dislike: PropTypes.number.isRequired
+}
+
+OnePostAdmin.defaultProps = {
+    userId: "",
+    username: "",
+    date: "",
+    picture: "",
+    description: "",
+    like: 0,
+    dislike: 0
+}

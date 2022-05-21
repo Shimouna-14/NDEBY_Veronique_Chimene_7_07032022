@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImage } from '@fortawesome/free-solid-svg-icons'
-import '../../styles/style.css'
-import Header from '../../components/Header'
-import PostContainer from '../../components/Home'
+import '../../../styles/style.css'
+import { UserHeader } from "../../../components/Header";
+import { ContainerPost } from '../../../components/Home'
 import { useEffect, useState } from 'react'
 import Axios from 'axios'
 import { useForm } from 'react-hook-form'
@@ -99,7 +100,6 @@ const AllPost = styled.div`
     flex-direction: column-reverse;
     align-items: center;
     width: 85%;
-
 `
 
 function Home() {
@@ -121,9 +121,9 @@ function Home() {
         formData.append("image", image)
         formData.append("description", data.description)
         Axios.post('http://localhost:8000/api/home', formData, {
-            headers: { 
+            headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': `token ${token}`            
+                'Authorization': `token ${token}`
             }
         })
         .then(() => window.location.reload())
@@ -134,29 +134,30 @@ function Home() {
 
     return (
         <>
-            <Header />
+            <UserHeader />
             <Main>
                 <Post>
                     <CreatePost>
                         <Form onSubmit={handleSubmit(createPost)}>
                             <Description>
-                                <Input type="text" placeholder='Post something...' {...register('description', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
-                                {errors.description && <span>Write a description</span>}
+                                <Input placeholder='Post something...' {...register('description', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/, max: "1500"})}/>
+                                {errors.description && <span>Write a description or the description is to long</span>}
                             </Description>
                             <label htmlFor='file'>
                                 <FontAwesomeIcon icon={faImage} size="2x"/>
                                 <input type="file" id='file' onChange={handleImage}/>
-                            </label>  
+                            </label>
                             <Button type="submit">Post</Button>
                         </Form>
                     </CreatePost>
                     <h1>Lasted post</h1>
                     <AllPost>
                         {postList.map((post) => (
-                            <PostContainer
+                            <ContainerPost
                                 key={post.id}
                                 postId={post.id}
                                 username={post.username}
+                                userId={post.userId}
                                 date={post.date}
                                 picture={post.image}
                                 description={post.description}

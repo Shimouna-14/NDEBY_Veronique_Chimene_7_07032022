@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App  from './components/App';
+import UserApp from './pages/user/App';
+import AdminApp from './pages/admin/App';
 import Body from './styles/body'
 
 ReactDOM.render(
   <React.StrictMode>
     <Body />
-    <App />
+    <AdminApp />
+    <UserApp />
   </React.StrictMode>,
   document.getElementById('root')
 );

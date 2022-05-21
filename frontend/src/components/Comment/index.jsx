@@ -27,7 +27,7 @@ const Content = styled.div`
     width: 95%;
 `
 
-function Comment({comment, userId, username, commentId}) {
+export function ContainerComment({comment, userId, username, commentId}) {
     let token = JSON.parse(localStorage.getItem("jwt_G"))
     let userData = JSON.parse(localStorage.getItem("userData"))
 
@@ -35,16 +35,14 @@ function Comment({comment, userId, username, commentId}) {
         Axios.delete(`http://localhost:8000/api/home/comments/${commentId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
-        .then(() => 
-            window.location.reload()
-        )
+        .then(() => window.location.reload())
         .catch((error) => console.log(error))
     }
-    
+
     return(
         <CommentContainer>
                 <Content>
-                    <Link to={`/profile/${username}`}><p>{username}</p></Link>
+                    <Link to={`/profile/${userId}`}><p>{username}</p></Link>
                     <p>{comment}</p>
                 </Content>
                     { userId === userData.userId ? (
@@ -57,18 +55,57 @@ function Comment({comment, userId, username, commentId}) {
     )
 };
 
-Comment.prototype = {
-    userId: PropTypes.string.isRequired, 
+ContainerComment.prototype = {
+    userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     comment : PropTypes.string.isRequired,
     commentId : PropTypes.string.isRequired
-}
+};
 
-Comment.defaultProps = {
-    userId: "", 
+ContainerComment.defaultProps = {
+    userId: "",
     username: "",
     comment: "",
     commentId: ""
-}
+};
 
-export default Comment;
+export function ContainerAdminComment({comment, userId, username, commentId}) {
+    let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
+
+    const deleted = () => {
+        Axios.delete(`http://localhost:8000/api/admin/comments/${commentId}`, {
+            headers: { 'Authorization': `token ${token}` }
+        })
+        .then(() => window.location.reload())
+        .catch((error) => console.log(error))
+    }
+
+    return(
+        <CommentContainer>
+                <Content>
+                    <Link to={`/profile/${userId}`}><p>{username}</p></Link>
+                    <p>{comment}</p>
+                </Content>
+                    { token ? (
+                        <div>
+                            <p id="commentId">{commentId}</p>
+                            <FontAwesomeIcon icon={faTrash} size="xl" onClick={deleted}/>
+                        </div>
+                    ) : (null)}
+        </CommentContainer>
+    )
+};
+
+ContainerAdminComment.prototype = {
+    userId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    comment : PropTypes.string.isRequired,
+    commentId : PropTypes.string.isRequired
+};
+
+ContainerAdminComment.defaultProps = {
+    userId: "",
+    username: "",
+    comment: "",
+    commentId: ""
+};

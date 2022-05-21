@@ -1,5 +1,5 @@
 /* Icon */
-.fa-user, .fa-envelope, .fa-lock, .fa-circle-user, .fa-image {color: white;}
+.fa-user, .fa-envelope, .fa-lock, .fa-circle-user, .fa-image, .fa-user-tie {color: white;}
 .fa-magnifying-glass {
     color: #AAA;
     position: relative;
@@ -23,6 +23,10 @@
     padding: 0 6px 0 15px;
     cursor: pointer;
 }
+
+.adminLogin{margin-top: 15px;}
+
+.powerOff{color: white;}
 
 /* Text */
 .param p {

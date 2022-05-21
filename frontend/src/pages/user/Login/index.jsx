@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
-import '../../styles/style.css'
-import logo from '../../assets/icon.png'
-import { Image, Sign, Icon, H1, H2, Form, Label, IconForm, Input, Button, StyledLink } from '../../components/SignupLogin'
+import '../../../styles/style.css'
+import logo from '../../../assets/icon.png'
+import { Image, Sign, Icon, H1, H2, Form, Label, IconForm, Input, Button, StyledLink } from '../../../components/SignupLogin'
 import Axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
@@ -43,23 +43,23 @@ function Login() {
                     <span>The email or password are incorrect</span>
                 ) : (null)}
                 <Form>
-                    <Label htmlFor="email"> 
-                        <IconForm><FontAwesomeIcon icon={faEnvelope} size="xl"/></IconForm> 
+                    <Label htmlFor="email">
+                        <IconForm><FontAwesomeIcon icon={faEnvelope} size="xl"/></IconForm>
                         <Input type="email" placeholder="Email" {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
                         {errors.email && <span>Please to fill your email </span>}
                     </Label>
 
-                    <Label htmlFor="password"> 
-                        <IconForm><FontAwesomeIcon icon={faLock} size="xl"/></IconForm> 
+                    <Label htmlFor="password">
+                        <IconForm><FontAwesomeIcon icon={faLock} size="xl"/></IconForm>
                         <Input type="password" placeholder="Password" {...register('password', { required: true, minLength: '8' })}/>
                         {errors.password && <span>Please to fill your password</span>}
-                    </Label>                    
+                    </Label>
                     <Button type="submit">Connexion</Button>
                 </Form>
                 <StyledLink to="/auth/signup">Create account</StyledLink>
             </Sign>
         </Image>
     )
-}
+};
 
 export default Login;

@@ -34,7 +34,7 @@ const P = styled.p`
     margin: 0;
 `
 
-function Error() {
+export function UserError() {
     return(
         <Main>
             <Img src={illustration} alt="Moon"/>
@@ -45,6 +45,19 @@ function Error() {
             </StyledLink>
         </Main>
     )
-}
+};
 
-export default Error;
+
+export function AdminError() {
+    return(
+        <Main>
+            <Img src={illustration} alt="Moon"/>
+            <H1>This page is missing or the link is incorrect</H1>
+            <StyledLink to='/admin/home'>
+                <P>Back to the home</P>
+                <FontAwesomeIcon icon={faArrowRight} />
+            </StyledLink>
+        </Main>
+    )
+};
+

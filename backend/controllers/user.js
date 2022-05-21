@@ -1,15 +1,21 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mysql = require("../middleware/db-mysql")
+const { v4: uuidv4 } = require('uuid');
 
 exports.signup = (req, res) => {
     if (!req.body.username || !req.body.email || !req.body.password) {{res.status(400).json({message : "Please to fill all the form !"})}}
     else {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-            mysql.query('INSERT INTO user (username, email, password, date) VALUES (?, ?, ?, CURRENT_TIMESTAMP())', [req.body.username, req.body.email, hash, Date()], (error, response) => {
-                if (error) {res.status(500).json({error})}
-                else (res.status(201).json({message: "User created !"}))
-            })
+        mysql.query('SELECT id FROM admin', (error, response) => {
+            if (error) {res.status(500).json({message: error})}
+            else {
+                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                    mysql.query('INSERT INTO user (id, username, email, password, requestId, date) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.body.username, req.body.email, hash, response[0].id, Date()], (error, response) => {
+                        if (error) {res.status(500).json({error})}
+                        else (res.status(201).json({message: "User created !"}))
+                    })
+                })
+            }
         })
     }
 };

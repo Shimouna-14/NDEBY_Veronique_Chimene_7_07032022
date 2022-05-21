@@ -6,15 +6,17 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
         const userId = decodedToken.userId;
         const username = decodedToken.username;
-        req.auth = { userId };  
+        const adminId = decodedToken.adminId;
+        req.auth = { userId };
         if (req.body.userId && req.body.userId !== userId) {
             throw "Invalid user ID";
         } else {
             req.userId = userId;
             req.username = username;
+            req.adminId = adminId;
             next();
         }
-    } 
+    }
     catch {res.status(403).json({ error: "Unauthorized requets"});
     }
 };

@@ -1,10 +1,10 @@
-import Header from "../../components/Header";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { UserHeader } from "../../../components/Header";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ContainerPost from "../../components/Post";
-import ContainerComment from "../../components/Comment";
-import Error from '../../components/Error'
+import { OnePost } from "../../../components/Post";
+import { ContainerComment } from "../../../components/Comment";
 
 const Main = styled.main`
     display: flex;
@@ -38,10 +38,10 @@ function Post() {
 
     return(
         <>
-            <Header />
+            <UserHeader />
             <Main>
                 {postData.map((post) => (
-                    <ContainerPost
+                    <OnePost
                         key={post.id}
                         userId={post.userId}
                         username={post.username}
@@ -53,7 +53,7 @@ function Post() {
                     />
                 ))}
                 {commentList.map((comment) => (
-                    <ContainerComment 
+                    <ContainerComment
                         key={comment.id}
                         userId={comment.userId}
                         username={comment.username}
@@ -64,6 +64,6 @@ function Post() {
             </Main>
         </>
     )
-}
+};
 
 export default Post;

@@ -4136,9 +4136,14 @@
     "minimatch" "^3.0.4"
 
 "eslint-plugin-react-hooks@^4.3.0":
-  "integrity" "sha512-XslZy0LnMn+84NEG9jSGR6eGqaZB3133L8xewQo3fQagbQuGt7a63gf+P1NGKZavEYEC3UXaWEAA/AqDkuN6xA=="
-  "resolved" "https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.3.0.tgz"
-  "version" "4.3.0"
+  "integrity" "sha512-8k1gRt7D7h03kd+SAAlzXkQwWK22BnK6GKZG+FJA6BAGy22CFvl8kCIXKpVux0cCxMWDQUPqSok0LKaZ0aOcCw=="
+  "resolved" "https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.5.0.tgz"
+  "version" "4.5.0"
+
+"eslint-plugin-react-hooks@^4.6.0-next-6e2f38f3a-20220519":
+  "integrity" "sha512-FPKPmZwBWW0Z5OTEeBqm5n2yt7Lq2zDBoWY1ohJou9dBLu4J/bB6tAVFmK3LWRX0aKwmKlChdnKafCRVYIBtsQ=="
+  "resolved" "https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.6.0-next-6e2f38f3a-20220519.tgz"
+  "version" "4.6.0-next-6e2f38f3a-20220519"
 
 "eslint-plugin-react@^7.27.1":
   "integrity" "sha512-MzW6TuCnDOcta67CkpDyRfRsEVx9FNMDV8wZsDqe1luHPdGTrQIUaUXD27Ja3gHsdOIs/cXzNchWGlqm+qRVRg=="

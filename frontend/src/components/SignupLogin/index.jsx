@@ -35,6 +35,26 @@ export const Sign = styled.div`
         width: 90%;
     }
 `
+export const LoginAdmin = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(53, 68, 110, 0.7);
+    width: 50%;
+    height: 100vh;
+    position: relative;
+    right: 0%;
+    z-index: 2;
+    @media screen and (max-width: 1023px) and (min-width: 546px) {
+        width: 70%;
+        height: 90vh;
+    }
+    @media screen and (max-width: 575px) {
+        height: 90vh;
+        width: 90%;
+    }
+`
 
 export const Icon = styled.img`
     width: 70px;
