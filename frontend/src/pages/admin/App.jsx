@@ -5,10 +5,12 @@ import Home from './Home';
 import Post from './Post';
 import Profile from './Profile';
 import { AdminError } from '../../components/Error'
+import jwt_decode from "jwt-decode";
 
 function Admin() {
     let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
     let adminData = JSON.parse(localStorage.getItem("adminData"))
+    if ( token !== null && jwt_decode(token[0]).exp * 1000 < Date.now()) { localStorage.clear() }
 
     return (
         <Router>

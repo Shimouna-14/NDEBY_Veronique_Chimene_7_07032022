@@ -47,6 +47,11 @@
     width: 100%;
 }
 
+.bold {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
 #commentId{display: none;}
 
 #file{

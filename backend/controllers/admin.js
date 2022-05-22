@@ -8,7 +8,7 @@ exports.signup = (req, res, next) => {
     if (!req.body.username || !req.body.email || !req.body.password) {{res.status(400).json({message : "Please to fill all the form !"})}}
     else {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
-            mysql.query('INSERT INTO admin (id, username, email, password, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(),req.body.username, req.body.email, hash, Date()], (error) => {
+            mysql.query('INSERT INTO admin (id, username, email, password, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.body.username, req.body.email, hash, Date()], (error) => {
                 if (error) {res.status(500).json({error})}
                 else res.status(201).json({message: "Admin created !"})
             })

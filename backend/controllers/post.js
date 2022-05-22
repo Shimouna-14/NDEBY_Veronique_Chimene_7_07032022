@@ -1,5 +1,6 @@
 const mysql = require("../middleware/db-mysql")
 const fs = require("fs");
+const { v4: uuidv4 } = require('uuid');
 
 exports.allPost = (req, res, next) => {
     mysql.query('SELECT * FROM post', (error, response) => {
@@ -19,12 +20,12 @@ exports.createPost = (req, res, next) => {
             else {
                 if (req.file) {
                     let image = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-                    mysql.query('INSERT INTO post (image, description, userId, username, requestId, date) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [image, req.body.description, req.userId, req.username, response[0].id, Date()], (error, response) => {
+                    mysql.query('INSERT INTO post (id, image, description, userId, username, requestId, date) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), image, req.body.description, req.userId, req.username, response[0].id, Date()], (error, response) => {
                         if (error) {res.status(500).json({error})}
                         else res.status(201).json({message: "Post created"})
                     })
                 } else {
-                    mysql.query('INSERT INTO post (description, userId, username, requestId, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [req.body.description, req.userId, req.username, response[0].id, Date()], (error, response) => {
+                    mysql.query('INSERT INTO post (id, description, userId, username, requestId, date) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.body.description, req.userId, req.username, response[0].id, Date()], (error, response) => {
                         if (error) {res.status(500).json({error})}
                         else res.status(201).json({message: "Post created"})
                     })
@@ -136,7 +137,7 @@ exports.postComments = (req, res, next) => {
         else {
             if (req.body.comment == "") {{res.status(400).json({message : "Write something in the comment !"})}}
             else {
-                mysql.query('INSERT INTO comments (postId, username, userId, comment, requestId, date) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [req.params.id, req.username, req.userId, req.body.comment, response[0].id, Date()], (error, response) => {
+                mysql.query('INSERT INTO comments (id, postId, username, userId, comment, requestId, date) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.username, req.userId, req.body.comment, response[0].id, Date()], (error, response) => {
                     if (error) {res.status(500).json({error})}
                     mysql.query('UPDATE post SET comments = comments + 1 WHERE id = ?', req.params.id, (error, response) => {
                         if (error) {res.status(500).json({error})}

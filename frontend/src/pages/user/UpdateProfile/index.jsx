@@ -61,7 +61,6 @@ const Div = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
-
 `
 
 const Bio = styled.textarea`
@@ -124,22 +123,22 @@ function UpdateProfile() {
         <>
             <UserHeader />
             <Main>
-            <Profile onSubmit={handleSubmit(updateProfile)}>
-                <Name>
-                    <FontAwesomeIcon icon={faUserCircle} size="4x" />
-                    <h1>{userData.username}</h1>
-                </Name>
-                <Info>
-                    <Div>
-                        <label htmlFor="bio">Bio :</label>
-                        <Bio placeholder='Write something...' value={bio} {...register('bio', {
-                            required: true, pattern: /^[A-Za-z][0-9A-Za-z '-:]{1,}$/, onChange: (event) => { setBio(event.target.value) }
-                        })} />
-                    </Div>
-                    {errors.bio && <span>Write something</span>}
-                </Info>
+                <Profile onSubmit={handleSubmit(updateProfile)}>
+                    <Name>
+                        <FontAwesomeIcon icon={faUserCircle} size="4x" />
+                        <h1>{userData.username}</h1>
+                    </Name>
+                    <Info>
+                        <Div>
+                            <label htmlFor="bio">Bio :</label>
+                            <Bio placeholder='Write something...' value={bio} {...register('bio', {
+                                required: true, pattern: /^[A-Za-z][0-9A-Za-z '-:]{1,}$/, onChange: (event) => { setBio(event.target.value) }
+                            })} />
+                        </Div>
+                        {errors.bio && <span>Write something</span>}
+                    </Info>
+                </Profile>
                 <Button>Confirm</Button>
-            </Profile>
             </Main>
         </>
     );

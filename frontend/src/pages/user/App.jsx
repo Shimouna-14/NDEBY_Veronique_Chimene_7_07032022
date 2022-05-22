@@ -9,12 +9,14 @@ import Profile from './Profile';
 import UpdateProfile from './UpdateProfile'
 import Setting from './Setting';
 import { UserError } from '../../components/Error'
+import jwt_decode from "jwt-decode";
 
 function App() {
-    let token = JSON.parse(localStorage.getItem("jwt_G"))
     let userData = JSON.parse(localStorage.getItem("userData"))
+    let token = JSON.parse(localStorage.getItem("jwt_G"))
+    if ( token !== null && jwt_decode(token[0]).exp * 1000 < Date.now()) { localStorage.clear() }
 
-    return (
+    return(
         <Router>
             <Switch>
                 <Route exact path='/'>

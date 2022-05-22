@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types'
@@ -49,6 +48,12 @@ const Info = styled.div`
     }
 `
 
+const Div = styled.div`
+    @media screen and (min-width: 547px) {
+        display: flex;
+    }
+`
+
 const Button = styled.div`
     display: flex;
     justify-content: space-around;
@@ -59,10 +64,11 @@ const Button = styled.div`
     @media screen and (max-width: 575px) {
         flex-direction: column;
         align-items: center;
+        margin-bottom: 40px;
     }
 `
 
-const BtnModify = styled(Link)`
+const BtnModify = styled.button`
     background: #C4CFAD;
     border-radius: 25px;
     width: 100px;
@@ -76,10 +82,10 @@ const BtnModify = styled(Link)`
     font-weight: 600;
 `
 
-const BtnDelete = styled(Link)`
+const BtnDelete = styled.button`
     background: #D05757;
     border-radius: 25px;
-    width: 200px;
+    width: 225px;
     height: 45px;
     font-size: 20px;
     color: white;
@@ -111,14 +117,14 @@ function Setting({ username, bio, email, date }) {
                     <h1>{username}</h1>
                 </Name>
                 <Info>
-                    <div>
-                        <p>Bio :</p>
+                    <Div>
+                        <p className="bold">Bio:</p>
                         <p>{bio}</p>
-                    </div>
-                    <div>
-                        <p>Email :</p>
+                    </Div>
+                    <Div>
+                        <p className="bold">Email:</p>
                         <p>{email}</p>
-                    </div>
+                    </Div>
                     <p>Inscribed since {date}</p>
                 </Info>
             </Profile>
