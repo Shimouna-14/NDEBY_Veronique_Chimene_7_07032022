@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle, faThumbsUp, faThumbsDown, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -39,7 +40,7 @@ const UserPost = styled.div`
 `
 
 const Icon = styled.div`
-    width: 75px;
+    width: 100px;
     margin-left: 50px;
     display: flex;
     justify-content: space-between;
@@ -168,7 +169,7 @@ export function OnePost({ userId, username, date, picture, description, like, di
             <Div>
                 <StyledLink to={`/profile/${userId}`}>
                     <UserPost>
-                        <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
+                        <FontAwesomeIcon role="img" aria-hidden="false" className='userPost' icon={faUserCircle} size="3x" />
                         <div>
                             <p className='paddingUsernameDate'>{username}</p>
                             <p className='paddingUsernameDate'>Published on {date}</p>
@@ -177,24 +178,25 @@ export function OnePost({ userId, username, date, picture, description, like, di
                 </StyledLink>
                 { userId === userData.userId ? (
                     <Icon>
-                        <Link to={`/update/${postId}`}><FontAwesomeIcon icon={faPen} size="lg"/></Link>
-                        <FontAwesomeIcon icon={faTrash} size="lg" onClick={deleted} />
+                        <Link to={`/update/${postId}`}><p className='paddingUsernameDate'>Update</p><FontAwesomeIcon aria-hidden="false" role="img" icon={faPen} size="lg"/></Link>
+                        <div><p className='paddingUsernameDate'>Delete</p><FontAwesomeIcon aria-hidden="false" role="img"icon={faTrash} size="lg" onClick={deleted} /></div>
                     </Icon>
                 ) : (null)}
             </Div>
             <p>{description}</p>
             { picture ? (
-                <CenterImg><img className='post-img' src={picture} alt=""/></CenterImg>
+                <CenterImg><img className='post-img' src={picture} alt="Post picture"/></CenterImg>
             ) : (null)}
             <LikeContainer>
-                <FontAwesomeIcon icon={faThumbsUp} size="xl" onClick={liked} />
+                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsUp} size="xl" onClick={liked} />
                 <p>{like}</p>
-                <FontAwesomeIcon icon={faThumbsDown} size="xl" onClick={disliked} />
+                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsDown} size="xl" onClick={disliked} />
                 <p>{dislike}</p>
             </LikeContainer>
             <Form onSubmit={handleSubmit(createComment)}>
-                <Comment type="text" placeholder='Comments...' {...register('comment', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
-                <button type="submit">Comment</button>
+                <label htmlFor="comment">Post a comment</label>
+                <Comment type="text" placeholder='Comments...' id="comment" {...register('comment', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
+                <button className="borderBtn" type="submit">Comment</button>
             </Form>
             {errors.comment && <span>Write a comment</span>}
         </Publication>
@@ -237,7 +239,7 @@ export function OnePostAdmin({ userId, username, date, picture, description, lik
             <Div>
                 <StyledLink to={`/admin/profile/${userId}`}>
                     <UserPost>
-                        <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
+                        <FontAwesomeIcon aria-hidden="false" role="img" className='userPost' icon={faUserCircle} size="3x" />
                         <div>
                             <p className='paddingUsernameDate'>{username}</p>
                             <p className='paddingUsernameDate'>Published on {date}</p>
@@ -246,18 +248,18 @@ export function OnePostAdmin({ userId, username, date, picture, description, lik
                 </StyledLink>
                 { token ? (
                     <>
-                        <FontAwesomeIcon icon={faTrash} size="lg" onClick={deleted} />
+                        <FontAwesomeIcon aria-hidden="false" role="img" icon={faTrash} size="lg" onClick={deleted} />
                     </>
                 ) : (null)}
             </Div>
             <p>{description}</p>
             { picture ? (
-                <CenterImg><img className='post-img' src={picture} alt=""/></CenterImg>
+                <CenterImg><img className='post-img' src={picture} alt="Post picture"/></CenterImg>
             ) : (null)}
             <LikeContainer>
-                <FontAwesomeIcon icon={faThumbsUp} size="xl" />
+                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsUp} size="xl" />
                 <p>{like}</p>
-                <FontAwesomeIcon icon={faThumbsDown} size="xl" />
+                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsDown} size="xl" />
                 <p>{dislike}</p>
             </LikeContainer>
         </Publication>

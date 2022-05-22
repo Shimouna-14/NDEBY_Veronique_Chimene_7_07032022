@@ -31,30 +31,33 @@ function Signup() {
                     <span>The email or username is already used</span>
                 ) : (null)}
                 <Form>
-                    <Label htmlFor="username"> 
-                        <IconForm><FontAwesomeIcon icon={faUser} size="xl" /></IconForm> 
-                        <Input type="text" placeholder="Username" {...register('username', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{2,}$/})}/>
+                    <Label htmlFor="username">
+                        Username :
+                        <IconForm><FontAwesomeIcon role="img" icon={faUser} size="xl" /></IconForm>
+                        <Input type="text" placeholder="Username" id="username" {...register('username', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{2,}$/})}/>
                         {errors.username && <span>Please to fill the input</span>}
                     </Label>
 
-                    <Label htmlFor="email"> 
-                        <IconForm><FontAwesomeIcon icon={faEnvelope} size="xl"/></IconForm> 
-                        <Input type="email" placeholder="Email" {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
+                    <Label htmlFor="email">
+                        Email :
+                        <IconForm><FontAwesomeIcon role="img" icon={faEnvelope} size="xl"/></IconForm>
+                        <Input type="email" placeholder="Email" id="email" {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
                         {errors.email && <span>Please to fill a valid email</span>}
                     </Label>
 
-                    <Label htmlFor="password"> 
-                        <IconForm><FontAwesomeIcon icon={faLock} size="xl"/></IconForm> 
-                        <Input type="password" placeholder="Password" {...register('password', { required: true, minLength: '8' })}/>
+                    <Label htmlFor="password">
+                        Password :
+                        <IconForm><FontAwesomeIcon role="img" icon={faLock} size="xl"/></IconForm>
+                        <Input type="password" placeholder="Password" id="password" {...register('password', { required: true, minLength: '8' })}/>
                         {errors.password && <span>The password must contain at least 8 characters</span>}
                     </Label>
 
-                    <Button type="submit">Create</Button>
+                    <Button className="borderBtn" type="submit">Create</Button>
                 </Form>
                 <StyledLink to="/auth/login">Log in</StyledLink>
             </Sign>
         </Image>
-    ) 
+    )
 };
 
 export default Signup;

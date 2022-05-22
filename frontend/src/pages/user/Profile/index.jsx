@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
 import { UserHeader } from "../../../components/Header";
 import { useEffect, useState } from "react";

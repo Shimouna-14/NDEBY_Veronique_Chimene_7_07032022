@@ -15,6 +15,7 @@ const Body = createGlobalStyle`
         text-decoration: none;
         color: black;
     }
+    button{ border: none }
 `
 
 export default Body

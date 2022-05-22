@@ -39,23 +39,25 @@ function Login() {
                 <Icon src={logo} alt="Logo Groupomania" />
                 <H1>Welcome back to Groupomania</H1>
                 <H2>Login - Admin</H2>
-                <FontAwesomeIcon className='adminLogin' icon={faUserTie} size="2x"/>
+                <FontAwesomeIcon aria-hidden="false" role="img"  className='adminLogin' icon={faUserTie} size="2x"/>
                 {error ? (
                     <span>The email or password are incorrect</span>
                 ) : (null)}
                 <Form>
                     <Label htmlFor="email">
-                        <IconForm><FontAwesomeIcon icon={faEnvelope} size="xl"/></IconForm>
-                        <Input type="email" placeholder="Email" {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
+                        <p className='whiteTxt'>Email :</p>
+                        <IconForm><FontAwesomeIcon aria-hidden="false" role="img" icon={faEnvelope} size="xl"/></IconForm>
+                        <Input className='whiteTxt' type="email" placeholder="Email" id='email' {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
                         {errors.email && <span>Please to fill your email </span>}
                     </Label>
 
                     <Label htmlFor="password">
-                        <IconForm><FontAwesomeIcon icon={faLock} size="xl"/></IconForm>
-                        <Input type="password" placeholder="Password" {...register('password', { required: true, minLength: '8' })}/>
+                        <p className='whiteTxt'>Password :</p>
+                        <IconForm><FontAwesomeIcon aria-hidden="false" role="img" icon={faLock} size="xl"/></IconForm>
+                        <Input  className='whiteTxt' type="password" placeholder="Password" id='password' {...register('password', { required: true, minLength: '8' })}/>
                         {errors.password && <span>Please to fill your password</span>}
                     </Label>
-                    <Button type="submit">Connexion</Button>
+                    <Button className="borderBtn" type="submit">Connexion</Button>
                 </Form>
             </LoginAdmin>
         </Image>

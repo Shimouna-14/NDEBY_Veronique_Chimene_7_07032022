@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types'
 import Axios from "axios";
+import { Link } from "react-router-dom"
 
 const Profile = styled.section`
     width: 70%;
@@ -15,7 +16,7 @@ const Profile = styled.section`
     border-radius: 20px;
     margin-bottom: 50px;
     margin-top: 20px;
-    @media screen and (max-width: 1023px) and (min-width: 546px) {
+    @media screen and (max-width: 1022px) and (min-width: 546px) {
         flex-direction: column;
         height: 450px;
     }
@@ -30,7 +31,7 @@ const Name = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media screen and (max-width: 1023px) and (min-width: 546px) {
+    @media screen and (max-width: 1022px) and (min-width: 546px) {
         width: 70%;
     }
     @media screen and (max-width: 575px) {
@@ -40,7 +41,7 @@ const Name = styled.div`
 
 const Info = styled.div`
     width: 50%;
-    @media screen and (max-width: 1023px) and (min-width: 546px) {
+    @media screen and (max-width: 1022px) and (min-width: 546px) {
         width: 80%;
     }
     @media screen and (max-width: 575px) {
@@ -58,7 +59,7 @@ const Button = styled.div`
     display: flex;
     justify-content: space-around;
     width: 50%;
-    @media screen and (max-width: 1023px) and (min-width: 546px) {
+    @media screen and (max-width: 1022px) and (min-width: 546px) {
         width: 80%;
     }
     @media screen and (max-width: 575px) {
@@ -68,13 +69,13 @@ const Button = styled.div`
     }
 `
 
-const BtnModify = styled.button`
+const BtnModify = styled(Link)`
     background: #C4CFAD;
     border-radius: 25px;
     width: 100px;
     height: 45px;
-    font-size: 20px;
-    color: white;
+    font-size: 18px;
+    color: black;
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
@@ -82,13 +83,13 @@ const BtnModify = styled.button`
     font-weight: 600;
 `
 
-const BtnDelete = styled.button`
+const BtnDelete = styled(Link)`
     background: #D05757;
     border-radius: 25px;
     width: 225px;
     height: 45px;
-    font-size: 20px;
-    color: white;
+    font-size: 18px;
+    color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -113,7 +114,7 @@ function Setting({ username, bio, email, date }) {
         <>
             <Profile>
                 <Name>
-                    <FontAwesomeIcon icon={faUserCircle} size="4x" />
+                    <FontAwesomeIcon aria-hidden="false" role="img" icon={faUserCircle} size="4x" />
                     <h1>{username}</h1>
                 </Name>
                 <Info>
@@ -129,8 +130,8 @@ function Setting({ username, bio, email, date }) {
                 </Info>
             </Profile>
             <Button>
-                <BtnModify to={`/update-profile/${userId}`}>Modify</BtnModify>
-                <BtnDelete onClick={deleted} to='/auth/signup'>Delete the account</BtnDelete>
+                <BtnModify className="borderBtn" to={`/update-profile/${userId}`}>Modify</BtnModify>
+                <BtnDelete className="borderBtn" onClick={deleted} to='/auth/signup'>Delete the account</BtnDelete>
             </Button>
         </>
     );

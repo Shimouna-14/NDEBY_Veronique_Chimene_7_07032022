@@ -46,10 +46,9 @@ export function ContainerComment({comment, userId, username, commentId}) {
                     <p>{comment}</p>
                 </Content>
                     { userId === userData.userId ? (
-                        <div>
-                            <p id="commentId">{commentId}</p>
-                            <FontAwesomeIcon icon={faTrash} size="xl" onClick={deleted}/>
-                        </div>
+                        <>
+                            <FontAwesomeIcon aria-hidden="false" icon={faTrash} size="xl" onClick={deleted}/>
+                        </>
                     ) : (null)}
         </CommentContainer>
     )
@@ -89,7 +88,7 @@ export function ContainerAdminComment({comment, userId, username, commentId}) {
                     { token ? (
                         <div>
                             <p id="commentId">{commentId}</p>
-                            <FontAwesomeIcon icon={faTrash} size="xl" onClick={deleted}/>
+                            <FontAwesomeIcon aria-hidden="false" icon={faTrash} size="xl" onClick={deleted}/>
                         </div>
                     ) : (null)}
         </CommentContainer>

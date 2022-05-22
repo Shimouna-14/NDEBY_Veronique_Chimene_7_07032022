@@ -94,6 +94,11 @@ const Setting = styled.div`
     width: 100px;
 `
 
+const Logout = styled(Link)`
+    display: flex;
+    flex-direction: column;
+`
+
 export function UserHeader() {
     const [isOpen, setIsOpen] = useState(true)
     let userData = JSON.parse(localStorage.getItem("userData"))
@@ -111,22 +116,23 @@ export function UserHeader() {
                     <Icon src={logo} alt="Logo Groupomania"/>
                     <LongIcon src={longlogo} alt="Logo Groupomania" />
                 </Link>
-                <div>
-                    <FontAwesomeIcon icon={faSearch} size="lg" />
-                    <Search placeholder='Search something...' />
-                </div>
+                <label htmlFor='search'>
+                    Search
+                    <FontAwesomeIcon aria-hidden="false" role="img" icon={faSearch} size="lg" />
+                    <Search id='search' placeholder='Search something...' />
+                </label>
                 {isOpen ? (
                     <>
-                        <FontAwesomeIcon className='user' onClick={() => setIsOpen(false)} icon={faUserCircle} size="2x" />
-                        <SettingClose/>
+                        <FontAwesomeIcon aria-hidden="false" role="img" className='user'tabindex="0"onClick={() => setIsOpen(false)} icon={faUserCircle} size="2x" />
+                        <SettingClose tabindex="0" />
                     </>
                 ) : (
                     <>
-                        <FontAwesomeIcon className='user' onClick={() => setIsOpen(true)} icon={faUserCircle} size="2x" />
+                        <FontAwesomeIcon aria-hidden="false" role="img" className='user' tabindex="0" onClick={() => setIsOpen(true)} icon={faUserCircle} size="2x" />
                         <SettingOpen>
                             <Link to={`/profile/${userData.userId}`}><h3>@{userData.username}</h3></Link>
-                            <Link to={`/setting/${userData.userId}`}><p><FontAwesomeIcon icon={faGear} /> Setting </p></Link>
-                            <Link onClick={logout} to="/auth/login"><p><FontAwesomeIcon icon={faPowerOff} /> Log out </p></Link>
+                            <Link to={`/setting/${userData.userId}`}><p><FontAwesomeIcon aria-hidden="false" role="img" icon={faGear} /> Setting </p></Link>
+                            <Link onClick={logout} to="/auth/login"><p><FontAwesomeIcon aria-hidden="false" role="img" icon={faPowerOff} /> Log out </p></Link>
                         </SettingOpen>
                     </>
                 )}
@@ -150,13 +156,17 @@ export function AdminHeader() {
                     <Icon src={logo} alt="Logo Groupomania"/>
                     <LongIcon src={longlogo} alt="Logo Groupomania" />
                 </Link>
-                <div>
-                    <FontAwesomeIcon icon={faSearch} size="lg" />
-                    <Search placeholder='Search something...' />
-                </div>
+                <label htmlFor='search' className='whiteTxt'>
+                    Search
+                    <FontAwesomeIcon aria-hidden="false" role="img"  icon={faSearch} size="lg" />
+                    <Search id='search' placeholder='Search something...' />
+                </label>
                 <Setting>
-                    <FontAwesomeIcon icon={faUserTie} size="2x" />
-                    <Link onClick={logout} to="/auth/admin/login"><FontAwesomeIcon className='powerOff' icon={faPowerOff} size="xl" /></Link>
+                    <FontAwesomeIcon aria-hidden="false" role="img" icon={faUserTie} size="2x" />
+                    <Logout onClick={logout} to="/auth/admin/login" className='whiteTxt'>
+                        <FontAwesomeIcon aria-hidden="false" role="img" className='whiteTxt' icon={faPowerOff} size="xl" />
+                        <p className='paddingUsernameDate'>Log out</p>
+                    </Logout>
                 </Setting>
             </AdminNav>
         </header>

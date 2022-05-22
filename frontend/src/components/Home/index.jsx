@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import styled from 'styled-components'
 import '../../styles/style.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -29,7 +30,7 @@ export function ContainerPost ({ postId, username, userId ,date, picture, descri
         <Publication>
             <Link to={`/profile/${userId}`}>
                 <UserPost>
-                    <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
+                    <FontAwesomeIcon aria-hidden="false" className='userPost' icon={faUserCircle} size="3x" />
                     <div>
                         <p className='paddingUsernameDate'>{username}</p>
                         <p className='paddingUsernameDate'>Published on {date}</p>
@@ -39,7 +40,7 @@ export function ContainerPost ({ postId, username, userId ,date, picture, descri
             <Link to={`/status/${postId}`}>
                 <p>{description}</p>
                 {picture ? (
-                    <CenterImg><img className='post-img' src={picture} alt=""/></CenterImg>
+                    <CenterImg><img className='post-img' src={picture} alt="Post picture"/></CenterImg>
                 ) : (null)}
             </Link>
         </Publication>
@@ -69,7 +70,7 @@ export function ContainerAdminPost ({ postId, username, userId ,date, picture, d
         <Publication>
             <Link to={`/admin/profile/${userId}`}>
                 <UserPost>
-                    <FontAwesomeIcon className='userPost' icon={faUserCircle} size="3x" />
+                    <FontAwesomeIcon aria-hidden="false" className='userPost' icon={faUserCircle} size="3x" />
                     <div>
                         <p className='paddingUsernameDate'>{username}</p>
                         <p className='paddingUsernameDate'>Published on {date}</p>

@@ -31,13 +31,13 @@ const Post = styled.section`
 const CreatePost = styled.div`
     background-color: #C4CFAD;
     width: 100%;
-    height: 100px;
+    height: 120px;
     border-radius: 20px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     @media screen and (max-width: 575px) {
-        height: 200px;
+        height: 300px;
     }
 `
 
@@ -46,20 +46,27 @@ const Form = styled.form`
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    width: 90%;
+    width: 100%;
     @media screen and (max-width: 575px) {
         flex-direction: column;
     }
 `
 
-const Description = styled.div`
+const Description = styled.label`
     display: flex;
     flex-direction: column;
     align-items: center;
+
     @media screen and (max-width: 575px) {
         width: 100%;
         margin-bottom: 15px;
     }
+`
+
+const Image = styled.label`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `
 
 const Input = styled.textarea`
@@ -68,18 +75,18 @@ const Input = styled.textarea`
     border-radius: 25px;
     padding: 5px 20px;
     width: 400px;
-    height: 50px;
+    height: 60px;
     @media screen and (max-width: 1023px) and (min-width: 546px) {
         width: 250px;
     }
     @media screen and (max-width: 575px) {
         width: 80%;
+        margin-top: 10px;
     }
 `
 const Button = styled.button`
-    border: 0;
     background-color: white;
-    color: #C4CFAD;
+    color: black;
     height: 30px;
     width: 65px;
     display: flex;
@@ -139,15 +146,18 @@ function Home() {
                 <Post>
                     <CreatePost>
                         <Form onSubmit={handleSubmit(createPost)}>
-                            <Description>
-                                <Input placeholder='Post something...' {...register('description', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/, max: "1500"})}/>
+                            <Description htmlFor='description'>
+                                <p className='paddingUsernameDate'>Create a post</p>
+                                <Input placeholder='Post something...' id='description' {...register('description', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/, max: "1500"})}/>
                                 {errors.description && <span>Write a description or the description is to long</span>}
                             </Description>
-                            <label htmlFor='file'>
-                                <FontAwesomeIcon icon={faImage} size="2x"/>
+                            <Image htmlFor='file'>
+                                <FontAwesomeIcon aria-hidden="false" role="img" icon={faImage} size="2x"/>
                                 <input type="file" id='file' onChange={handleImage}/>
-                            </label>
-                            <Button type="submit">Post</Button>
+                                <p>Select a image</p>
+
+                            </Image>
+                            <Button className="borderBtn" type="submit">Post</Button>
                         </Form>
                     </CreatePost>
                     <h1>Lasted post</h1>

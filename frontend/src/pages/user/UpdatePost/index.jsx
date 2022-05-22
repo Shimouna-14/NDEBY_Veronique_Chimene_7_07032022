@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { UserHeader } from '../../../components/Header'
 import styled from "styled-components";

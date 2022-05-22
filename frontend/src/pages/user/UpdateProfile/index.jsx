@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { UserHeader } from '../../../components/Header';
@@ -81,7 +82,7 @@ const Button = styled.button`
     width: 120px;
     height: 45px;
     font-size: 20px;
-    color: white;
+    color: black;
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
@@ -125,20 +126,20 @@ function UpdateProfile() {
             <Main>
                 <Profile onSubmit={handleSubmit(updateProfile)}>
                     <Name>
-                        <FontAwesomeIcon icon={faUserCircle} size="4x" />
+                        <FontAwesomeIcon aria-hidden="false" role="img" icon={faUserCircle} size="4x" />
                         <h1>{userData.username}</h1>
                     </Name>
                     <Info>
                         <Div>
                             <label htmlFor="bio">Bio :</label>
-                            <Bio placeholder='Write something...' value={bio} {...register('bio', {
+                            <Bio placeholder='Write something...' id='bio' value={bio} {...register('bio', {
                                 required: true, pattern: /^[A-Za-z][0-9A-Za-z '-:]{1,}$/, onChange: (event) => { setBio(event.target.value) }
                             })} />
                         </Div>
                         {errors.bio && <span>Write something</span>}
                     </Info>
                 </Profile>
-                <Button>Confirm</Button>
+                <Button className="borderBtn">Confirm</Button>
             </Main>
         </>
     );

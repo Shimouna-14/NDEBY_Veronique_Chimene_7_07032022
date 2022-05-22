@@ -44,17 +44,19 @@ function Login() {
                 ) : (null)}
                 <Form>
                     <Label htmlFor="email">
-                        <IconForm><FontAwesomeIcon icon={faEnvelope} size="xl"/></IconForm>
-                        <Input type="email" placeholder="Email" {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
+                        Email :
+                        <IconForm><FontAwesomeIcon role="img" icon={faEnvelope} size="xl"/></IconForm>
+                        <Input type="email" placeholder="Email" id="email" {...register('email', { required: true, pattern: /^[\w.-]+@[\w.-]+\.[\w]+$/ })}/>
                         {errors.email && <span>Please to fill your email </span>}
                     </Label>
 
                     <Label htmlFor="password">
-                        <IconForm><FontAwesomeIcon icon={faLock} size="xl"/></IconForm>
-                        <Input type="password" placeholder="Password" {...register('password', { required: true, minLength: '8' })}/>
+                        Password :
+                        <IconForm><FontAwesomeIcon role="img" icon={faLock} size="xl"/></IconForm>
+                        <Input type="password" placeholder="Password" id="password" {...register('password', { required: true, minLength: '8' })}/>
                         {errors.password && <span>Please to fill your password</span>}
                     </Label>
-                    <Button type="submit">Connexion</Button>
+                    <Button className="borderBtn" type="submit">Connection</Button>
                 </Form>
                 <StyledLink to="/auth/signup">Create account</StyledLink>
             </Sign>

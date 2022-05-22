@@ -32,18 +32,18 @@ function Profile({ username, bio }) {
     return token ?  (
         <>
             <Profil>
-            <FontAwesomeIcon className='userPost' icon={faUserCircle} size="5x" />
+            <FontAwesomeIcon aria-hidden="false" role="img"  className='userPost' icon={faUserCircle} size="5x" />
                 <UserProfile>
                     <h1>{username}</h1>
                     <p>{bio}</p>
                 </UserProfile>
-                <FontAwesomeIcon icon={faTrash} onClick={deleted} size="lg" />
+                <FontAwesomeIcon aria-hidden="false" role="img" icon={faTrash} onClick={deleted} size="lg" />
             </Profil>
         </>
     ) : (
         <>
             <Profil>
-            <FontAwesomeIcon className='userPost' icon={faUserCircle} size="5x" />
+            <FontAwesomeIcon aria-hidden="false" role="img" className='userPost' icon={faUserCircle} size="5x" />
                 <UserProfile>
                     <h1>{username}</h1>
                     <p>{bio}</p>
