@@ -23,7 +23,7 @@ function Post() {
         })
             .then((response) => response.json())
             .then((postData) => {setPostData(postData)})
-            .catch(() => window.location = '/error')
+            .catch(() => window.location = '/admin/error')
     }, [postId])
 
     const [commentList, setcommentList] = useState([])
@@ -58,6 +58,7 @@ function Post() {
                         userId={comment.userId}
                         username={comment.username}
                         comment={comment.comment}
+                        commentId={comment.id}
                     />
                 ))}
             </Main>

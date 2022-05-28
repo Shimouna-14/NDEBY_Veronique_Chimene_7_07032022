@@ -5,13 +5,8 @@
     position: relative;
     left: 30px;
 }
-.fa-trash{
-    color: #D05757;
-}
+.fa-trash{color: #D05757;}
 .fa-image, .user, .fa-trash{cursor: pointer;}
-.user:hover + .setting{
-    display: flex;
-}
 .userPost{
     color: black;
     padding-right: 30px;

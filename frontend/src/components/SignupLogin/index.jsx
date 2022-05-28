@@ -28,10 +28,10 @@ export const Sign = styled.div`
     z-index: 2;
     @media screen and (max-width: 1023px) and (min-width: 546px) {
         width: 70%;
-        height: 90vh;
+        height: 96vh;
     }
     @media screen and (max-width: 575px) {
-        height: 90vh;
+        height: 96vh;
         width: 90%;
     }
 `

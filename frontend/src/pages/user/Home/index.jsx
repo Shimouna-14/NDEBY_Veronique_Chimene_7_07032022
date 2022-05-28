@@ -152,8 +152,8 @@ function Home() {
                                 {errors.description && <span>Write a description or the description is to long</span>}
                             </Description>
                             <Image htmlFor='file'>
-                                <FontAwesomeIcon aria-hidden="false" role="img" icon={faImage} size="2x"/>
-                                <input type="file" id='file' onChange={handleImage}/>
+                                <FontAwesomeIcon  aria-hidden="false" role="img" icon={faImage} size="2x"/>
+                                <input type="file" id='file' tabIndex="0" onChange={handleImage}/>
                                 <p>Select a image</p>
 
                             </Image>

@@ -58,6 +58,7 @@ function Post() {
                         userId={comment.userId}
                         username={comment.username}
                         comment={comment.comment}
+                        commentId={comment.id}
                     />
                 ))}
             </Main>

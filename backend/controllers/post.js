@@ -84,7 +84,7 @@ exports.deletePost = (req, res, next) => {
 
 exports.likePost = (req, res, next) => {
     if (req.body.likes == 1) {
-        mysql.query('INSERT INTO likes (postId, userId, username, date) VALUES (?, ?, ?, CURRENT_TIMESTAMP())', [req.params.id, req.userId, req.username, Date()], (error, response) => {
+        mysql.query('INSERT INTO likes (id, postId, userId, username, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.userId, req.username, Date()], (error, response) => {
             if (error) {res.status(500).json({error})}
             mysql.query('UPDATE post SET likes = likes + 1 WHERE id = ?', req.params.id, (error, response) => {
                 if (error) {res.status(500).json({error})}
@@ -104,7 +104,7 @@ exports.likePost = (req, res, next) => {
     };
 
     if (req.body.dislikes == -1) {
-        mysql.query('INSERT INTO dislikes (postId, userId, username, date)  VALUES (?, ?, ?, CURRENT_TIMESTAMP())', [req.params.id, req.userId, req.username, Date()], (error, response) => {
+        mysql.query('INSERT INTO dislikes (id, postId, userId, username, date)  VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.userId, req.username, Date()], (error, response) => {
             if (error) {res.status(500).json({error})}
             mysql.query('UPDATE post SET dislikes = dislikes + 1 WHERE id = ?', req.params.id, (error, response) => {
                 if (error) {res.status(500).json({error})}

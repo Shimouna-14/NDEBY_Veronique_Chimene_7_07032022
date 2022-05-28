@@ -14,7 +14,7 @@ const Main = styled.main`
     align-items: center;
 `
 
-const Profile = styled.form`
+const Form = styled.form`
     width: 70%;
     background-color: #f4f4f4;
     display: flex;
@@ -36,7 +36,7 @@ const Profile = styled.form`
 `
 
 const Name = styled.div`
-    width: 45%;
+    width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,7 +49,7 @@ const Name = styled.div`
 `
 
 const Info = styled.div`
-    width: 50%;
+    width: 45%;
     @media screen and (max-width: 1023px) and (min-width: 546px) {
         width: 80%;
     }
@@ -64,11 +64,11 @@ const Div = styled.div`
     margin-bottom: 15px;
 `
 
-const Bio = styled.textarea`
+const Input = styled.textarea`
     resize: none;
     border: 1px solid black;
     border-radius: 20px;
-    width: 80%;
+    width: 85%;
     height: 125px;
     padding: 5px 0 0 15px;
     @media screen and (max-width: 575px) {
@@ -124,7 +124,7 @@ function UpdateProfile() {
         <>
             <UserHeader />
             <Main>
-                <Profile onSubmit={handleSubmit(updateProfile)}>
+                <Form onSubmit={handleSubmit(updateProfile)}>
                     <Name>
                         <FontAwesomeIcon aria-hidden="false" role="img" icon={faUserCircle} size="4x" />
                         <h1>{userData.username}</h1>
@@ -132,14 +132,13 @@ function UpdateProfile() {
                     <Info>
                         <Div>
                             <label htmlFor="bio">Bio :</label>
-                            <Bio placeholder='Write something...' id='bio' value={bio} {...register('bio', {
-                                required: true, pattern: /^[A-Za-z][0-9A-Za-z '-:]{1,}$/, onChange: (event) => { setBio(event.target.value) }
+                            <Input placeholder='Write something...' id='bio' value={bio} {...register('bio', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-:]{1,}$/, onChange: (event) => { setBio(event.target.value) }
                             })} />
                         </Div>
                         {errors.bio && <span>Write something</span>}
                     </Info>
-                </Profile>
-                <Button className="borderBtn">Confirm</Button>
+                    <Button className="borderBtn">Confirm</Button>
+                </Form>
             </Main>
         </>
     );

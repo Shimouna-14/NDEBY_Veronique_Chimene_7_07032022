@@ -4,7 +4,6 @@ const adminCtrl = require("../controllers/admin");
 const limiter = require("../middleware/limiter")
 const auth = require("../middleware/auth")
 
-router.post("/auth/signup", adminCtrl.signup);
 router.post("/auth/login", limiter, adminCtrl.login);
 router.get("/logout", adminCtrl.logout);
 router.get("/home", auth, adminCtrl.allPost);

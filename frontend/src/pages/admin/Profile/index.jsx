@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import { AdminHeader } from "../../../components/Header";
 import { useEffect, useState } from "react";
-import { ContainerPost } from '../../../components/Home'
+import { ContainerAdminPost } from '../../../components/Home'
 import ProfileContainer from '../../../components/Profile'
 import { useParams } from "react-router-dom";
 
@@ -48,7 +48,7 @@ function Profile() {
         })
             .then((response) => response.json())
             .then((profile) => (setProfile(profile)))
-            .catch((error) => console.log(error))
+            .catch(() => window.location = '/admin/error')
     }, [userId])
 
     const [postList, setPostList] = useState([])
@@ -76,7 +76,7 @@ function Profile() {
 
                 <AllPost>
                     {postList.map((post) => (
-                        <ContainerPost
+                        <ContainerAdminPost
                             key={post.id}
                             postId={post.id}
                             username={post.username}

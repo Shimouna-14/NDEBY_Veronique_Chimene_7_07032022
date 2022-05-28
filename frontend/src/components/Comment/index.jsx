@@ -82,12 +82,11 @@ export function ContainerAdminComment({comment, userId, username, commentId}) {
     return(
         <CommentContainer>
                 <Content>
-                    <Link to={`/profile/${userId}`}><p>{username}</p></Link>
+                    <Link to={`/admin/profile/${userId}`}><p>{username}</p></Link>
                     <p>{comment}</p>
                 </Content>
                     { token ? (
                         <div>
-                            <p id="commentId">{commentId}</p>
                             <FontAwesomeIcon aria-hidden="false" icon={faTrash} size="xl" onClick={deleted}/>
                         </div>
                     ) : (null)}

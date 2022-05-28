@@ -123,12 +123,14 @@ export function UserHeader() {
                 </label>
                 {isOpen ? (
                     <>
-                        <FontAwesomeIcon aria-hidden="false" role="img" className='user'tabindex="0"onClick={() => setIsOpen(false)} icon={faUserCircle} size="2x" />
-                        <SettingClose tabindex="0" />
+                        <FontAwesomeIcon aria-hidden="false" role="img" className='user'
+                        tabIndex="0 "onClick={() => setIsOpen(false)} icon={faUserCircle} size="2x" />
+                        <SettingClose />
                     </>
                 ) : (
                     <>
-                        <FontAwesomeIcon aria-hidden="false" role="img" className='user' tabindex="0" onClick={() => setIsOpen(true)} icon={faUserCircle} size="2x" />
+                        <FontAwesomeIcon aria-hidden="false" role="img" className='user'
+                        tabIndex="0" onClick={() => setIsOpen(true)} icon={faUserCircle} size="2x" />
                         <SettingOpen>
                             <Link to={`/profile/${userData.userId}`}><h3>@{userData.username}</h3></Link>
                             <Link to={`/setting/${userData.userId}`}><p><FontAwesomeIcon aria-hidden="false" role="img" icon={faGear} /> Setting </p></Link>
@@ -145,7 +147,7 @@ export function AdminHeader() {
     const logout = () => {
         Axios.get('http://localhost:8000/api/admin/logout')
         .then(() => localStorage.clear() )
-        .then(() => window.location = "/auth/admin/login")
+        .then(() => window.location = "/admin/auth/login")
         .catch((error) => console.log(error))
     }
 

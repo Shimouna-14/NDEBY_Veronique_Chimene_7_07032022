@@ -86,7 +86,7 @@ export function OnePost({ userId, username, date, picture, description, like, di
     let token = JSON.parse(localStorage.getItem("jwt_G"))
     const [likeActive, setLikeActive] = useState(false)
     const [dislikeActive, setDislikeActive] = useState(false)
-
+    console.log(likeActive);
     const deleted = () => {
         Axios.delete(`http://localhost:8000/api/home/status/${postId}`, {
             headers: { 'Authorization': `token ${token}` }
@@ -163,7 +163,6 @@ export function OnePost({ userId, username, date, picture, description, like, di
         .then(() => window.location.reload())
         .catch((error) => console.log(error))
     }
-
     return(
         <Publication>
             <Div>
@@ -190,6 +189,7 @@ export function OnePost({ userId, username, date, picture, description, like, di
             <LikeContainer>
                 <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsUp} size="xl" onClick={liked} />
                 <p>{like}</p>
+
                 <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsDown} size="xl" onClick={disliked} />
                 <p>{dislike}</p>
             </LikeContainer>

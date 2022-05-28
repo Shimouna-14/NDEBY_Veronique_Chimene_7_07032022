@@ -2,19 +2,6 @@ const mysql = require("../middleware/db-mysql")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const { v4: uuidv4 } = require('uuid');
-
-exports.signup = (req, res, next) => {
-    if (!req.body.username || !req.body.email || !req.body.password) {{res.status(400).json({message : "Please to fill all the form !"})}}
-    else {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-            mysql.query('INSERT INTO admin (id, username, email, password, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.body.username, req.body.email, hash, Date()], (error) => {
-                if (error) {res.status(500).json({error})}
-                else res.status(201).json({message: "Admin created !"})
-            })
-        })
-    }
-};
 
 exports.login = (req, res, next) => {
     mysql.query('SELECT * FROM admin WHERE email = ?', req.body.email, (error, response) => {
@@ -91,8 +78,6 @@ exports.deletePost = (req, res, next) => {
 exports.comments = (req, res, next) => {
     mysql.query('SELECT * FROM comments WHERE postId = ?', req.params.id, (error, response) => {
         if (error) {res.status(500).json({error})}
-                    if (error) {res.status(500).json({error})}
-        if (error) {res.status(500).json({error})}
         else res.status(200).json(response)
     })
 };
@@ -102,17 +87,14 @@ exports.deleteComments = (req, res, next) => {
         if (error) {res.status(500).json({error})}
         if (response == []) {res.status(404).json({error : "Unauthorized request !"})}
         else {
-            mysql.query('SELECT * FROM comments WHERE postId = ?', req.params.id, (error, response) => {
+            mysql.query('DELETE FROM comments WHERE id = ?', [req.params.id], (error, response) => {
                 if (error) {res.status(500).json({error})}
-                mysql.query('DELETE FROM comments WHERE id = ? AND userId = ?', [req.params.id, req.userId], (error, response) => {
-                    if (error) {res.status(500).json({error})}
-                    else {
-                        mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', req.params.id, (error, response) => {
-                            if (error) {res.status(500).json({error})}
-                            else res.status(200).json({message: "Comment delete"})
-                        })
-                    }
-                })
+                else {
+                    mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', req.params.id, (error, response) => {
+                        if (error) {res.status(500).json({error})}
+                        else res.status(200).json({message: "Comment delete"})
+                    })
+                }
             })
         }
     })
@@ -141,12 +123,9 @@ exports.deleteProfile = (req, res, next) => {
         if (error) {res.status(500).json({error})}
         if (response.length == []) {res.status(404).json({error : "Unauthorized request !"})}
         else {
-            mysql.query('SELECT * FROM user WHERE id = ?', req.params.id, (error, response) => {
+            mysql.query('DELETE FROM user WHERE id = ?', req.params.id, (error, response) => {
                 if (error) {res.status(500).json({error})}
-                mysql.query('DELETE FROM user WHERE id = ?', req.params.id, (error, response) => {
-                    if (error) {res.status(500).json({error})}
-                    res.status(200).json({message : "User deleted !"})
-                })
+                else {res.status(200).json({message : "User deleted !"})}
             })
         }
     })

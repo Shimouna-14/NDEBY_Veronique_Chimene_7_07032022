@@ -27,9 +27,7 @@ function Signup() {
                 <Icon src={logo} alt="Logo Groupomania" />
                 <H1>Welcome to Groupomania</H1>
                 <H2>Signup</H2>
-                {error ? (
-                    <span>The email or username is already used</span>
-                ) : (null)}
+                {error ? ( <span>The email or username is already used</span>  ) : (null)}
                 <Form>
                     <Label htmlFor="username">
                         Username :
@@ -51,7 +49,6 @@ function Signup() {
                         <Input type="password" placeholder="Password" id="password" {...register('password', { required: true, minLength: '8' })}/>
                         {errors.password && <span>The password must contain at least 8 characters</span>}
                     </Label>
-
                     <Button className="borderBtn" type="submit">Create</Button>
                 </Form>
                 <StyledLink to="/auth/login">Log in</StyledLink>
