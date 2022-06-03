@@ -17,6 +17,9 @@
     cursor: pointer;
 }
 
+.liked {color: green;}
+.disliked{color: #D05757;}
+
 .adminLogin{margin-top: 15px;}
 
 /* Text */

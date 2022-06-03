@@ -11,7 +11,7 @@ function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [error, setError] = useState(false)
 
-    const sign = (data) => {
+    const login = (data) => {
         Axios.post('http://localhost:8000/api/auth/login', {
             email: data.email,
             password: data.password
@@ -35,13 +35,11 @@ function Login() {
 
     return(
         <Image>
-            <Sign onSubmit={handleSubmit(sign)}>
+            <Sign onSubmit={handleSubmit(login)}>
                 <Icon src={logo} alt="Logo Groupomania" />
                 <H1>Welcome back to Groupomania</H1>
                 <H2>Login</H2>
-                {error ? (
-                    <span>The email or password are incorrect</span>
-                ) : (null)}
+                {error ? (<span>The email or password are incorrect</span>) : (null)}
                 <Form>
                     <Label htmlFor="email">
                         Email :

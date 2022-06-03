@@ -80,13 +80,14 @@ const LikeContainer = styled.div`
     align-items: center;
 `
 
-export function OnePost({ userId, username, date, picture, description, like, dislike }) {
+export function OnePost({ userId, username, date, picture, description, likes, dislikes }) {
     const { id: postId } = useParams()
     let userData = JSON.parse(localStorage.getItem("userData"))
     let token = JSON.parse(localStorage.getItem("jwt_G"))
     const [likeActive, setLikeActive] = useState(false)
     const [dislikeActive, setDislikeActive] = useState(false)
-    console.log(likeActive);
+    const [like, setLike] = useState(likes)
+    const [dislike, setDislike] = useState(dislikes)
     const deleted = () => {
         Axios.delete(`http://localhost:8000/api/home/status/${postId}`, {
             headers: { 'Authorization': `token ${token}` }
@@ -98,14 +99,15 @@ export function OnePost({ userId, username, date, picture, description, like, di
     function handleLike() {
         if (likeActive) {
             setLikeActive(false)
-            like = like - 1
+            setLike(like - 1)
         } else {
-            setLikeActive(true)
-            like = like + 1
-            if (dislikeActive) {
-                setDislikeActive(false)
-                like = like + 1
-                dislike = dislike - 1
+            if (like >= 1) {
+                setLikeActive(false)
+                setLike(like - 1)
+            } else {
+                setLikeActive(true)
+                setLike(like + 1)
+
             }
         }
     };
@@ -113,16 +115,17 @@ export function OnePost({ userId, username, date, picture, description, like, di
     function handleDislike() {
         if (dislikeActive) {
             setDislikeActive(false)
-            dislike = dislike - 1
+            setDislike(dislike - 1)
         } else {
-            setDislikeActive(true)
-            dislike = dislike + 1
-            if (likeActive) {
-                setLikeActive(false)
-                dislike = dislike + 1
-                like = like - 1
+            if (dislike >= 1) {
+                setDislikeActive(false)
+                setDislike(dislike - 1)
+            } else {
+                setDislikeActive(true)
+                setDislike(dislike + 1)
             }
         }
+
     };
 
     const liked = () => {
@@ -134,7 +137,6 @@ export function OnePost({ userId, username, date, picture, description, like, di
             }
         })
         .then(() => handleLike())
-        .then(() => window.location.reload())
         .catch((error) => console.log(error))
     };
 
@@ -147,7 +149,6 @@ export function OnePost({ userId, username, date, picture, description, like, di
             }
         })
         .then(() => handleDislike())
-        .then(() => window.location.reload())
         .catch((error) => console.log(error))
     };
 
@@ -175,27 +176,49 @@ export function OnePost({ userId, username, date, picture, description, like, di
                         </div>
                     </UserPost>
                 </StyledLink>
-                { userId === userData.userId ? (
+                {userId === userData.userId ? (
                     <Icon>
-                        <Link to={`/update/${postId}`}><p className='paddingUsernameDate'>Update</p><FontAwesomeIcon aria-hidden="false" role="img" icon={faPen} size="lg"/></Link>
-                        <div><p className='paddingUsernameDate'>Delete</p><FontAwesomeIcon aria-hidden="false" role="img"icon={faTrash} size="lg" onClick={deleted} /></div>
+                        <Link to={`/update/${postId}`}>
+                            <p className='paddingUsernameDate'>Update</p>
+                            <FontAwesomeIcon aria-hidden="false" role="img" icon={faPen} size="lg"/>
+                        </Link>
+                        <div>
+                            <p className='paddingUsernameDate'>Delete</p>
+                            <FontAwesomeIcon aria-hidden="false" role="img"icon={faTrash} size="lg" onClick={deleted} />
+                            </div>
                     </Icon>
                 ) : (null)}
             </Div>
             <p>{description}</p>
-            { picture ? (
-                <CenterImg><img className='post-img' src={picture} alt="Post picture"/></CenterImg>
-            ) : (null)}
+            { picture ? (<CenterImg><img className='post-img' src={picture} alt="Post picture"/></CenterImg>) : (null)}
             <LikeContainer>
-                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsUp} size="xl" onClick={liked} />
-                <p>{like}</p>
-
-                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsDown} size="xl" onClick={disliked} />
-                <p>{dislike}</p>
+                {dislikeActive === true ? (
+                    <>
+                        <FontAwesomeIcon aria-hidden="false" role="img"  icon={faThumbsUp} size="xl"  />
+                        <p>{like}</p>
+                    </>
+                ) : (
+                    <>
+                        <FontAwesomeIcon aria-hidden="false" role="img" className="liked" icon={faThumbsUp} size="xl" onClick={liked} />
+                        <p>{like}</p>
+                    </>
+                ) }
+                {likeActive === true ? (
+                    <>
+                        <FontAwesomeIcon aria-hidden="false" role="img"   icon={faThumbsDown} size="xl" />
+                        <p>{dislike}</p>
+                    </>
+                ) : (
+                    <>
+                        <FontAwesomeIcon aria-hidden="false" role="img" className="disliked" icon={faThumbsDown} size="xl" onClick={disliked} />
+                        <p>{dislike}</p>
+                    </>
+                ) }
             </LikeContainer>
             <Form onSubmit={handleSubmit(createComment)}>
                 <label htmlFor="comment">Post a comment</label>
-                <Comment type="text" placeholder='Comments...' id="comment" {...register('comment', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
+                <Comment type="text" placeholder='Comments...' id="comment"
+                {...register('comment', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
                 <button className="borderBtn" type="submit">Comment</button>
             </Form>
             {errors.comment && <span>Write a comment</span>}
