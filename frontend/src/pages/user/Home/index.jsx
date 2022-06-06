@@ -148,7 +148,7 @@ function Home() {
                         <Form onSubmit={handleSubmit(createPost)}>
                             <Description htmlFor='description'>
                                 <p className='paddingUsernameDate'>Create a post</p>
-                                <Input placeholder='Post something...' id='description' {...register('description', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/, max: "1500"})}/>
+                                <Input placeholder='Post something...' id='description' {...register('description', { required: true, pattern: /^[A-Za-z][0-9A-Za-z '-,?)!-(:+]{1,}$/, max: "1500"})}/>
                                 {errors.description && <span>Write a description or the description is to long</span>}
                             </Description>
                             <Image htmlFor='file'>

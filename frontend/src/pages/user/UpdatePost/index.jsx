@@ -94,7 +94,7 @@ function UpdatePost() {
             <Main>
                 <Publication>
                     <Form onSubmit={handleSubmit(updatePost)} >
-                        <Input placeholder='Write something...' value={description} {...register('description', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-:]{1,}$/, onChange: (event) => { setDescription(event.target.value) }})}/>
+                        <Input placeholder='Write something...' value={description} {...register('description', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-,?)!-(:+]{1,}$/, onChange: (event) => { setDescription(event.target.value) }})}/>
                         {errors.description && <span>Write a description</span>}
                         <Button>Update</Button>
                     </Form>

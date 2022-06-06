@@ -11,7 +11,7 @@ function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [error, setError] = useState(false)
 
-    const sign = (data) => {
+    const log = (data) => {
         Axios.post('http://localhost:8000/api/admin/auth/login', {
             email: data.email,
             password: data.password
@@ -35,7 +35,7 @@ function Login() {
 
     return(
         <Image>
-            <LoginAdmin onSubmit={handleSubmit(sign)}>
+            <LoginAdmin onSubmit={handleSubmit(log)}>
                 <Icon src={logo} alt="Logo Groupomania" />
                 <H1>Welcome back to Groupomania</H1>
                 <H2>Login - Admin</H2>

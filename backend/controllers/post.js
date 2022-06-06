@@ -84,7 +84,7 @@ exports.deletePost = (req, res, next) => {
 
 exports.likePost = (req, res, next) => {
     if (req.body.likes == 1) {
-        mysql.query('SELECT * FROM dislikes WHERE userId = ?', req.userId, (error, response) => {
+        mysql.query('SELECT * FROM dislikes WHERE userId = ? AND postId = ?', [req.userId, req.params.id], (error, response) => {
             if (response.length == []) {
                 mysql.query('INSERT INTO likes (id, postId, userId, username, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.userId, req.username, Date()], (error, response) => {
                     if (error) {res.status(500).json({error})}
@@ -109,7 +109,7 @@ exports.likePost = (req, res, next) => {
     };
 
     if (req.body.dislikes == -1) {
-        mysql.query('SELECT * FROM likes WHERE userId = ?', req.userId, (error, response) => {
+        mysql.query('SELECT * FROM likes WHERE userId = ? AND postId = ?', [req.userId, req.params.id], (error, response) => {
             if (response.length == []) {
                 mysql.query('INSERT INTO dislikes (id, postId, userId, username, date)  VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.userId, req.username, Date()], (error, response) => {
                     if (error) {res.status(500).json({error})}
@@ -160,14 +160,14 @@ exports.postComments = (req, res, next) => {
 };
 
 exports.deleteComments = (req, res, next) => {
-    mysql.query('SELECT * FROM comments WHERE postId = ?', req.params.id, (error, response) => {
+    mysql.query('SELECT * FROM comments WHERE id = ?', req.params.id, (error, response) => {
         if (error) {res.status(500).json({error})}
-        mysql.query('DELETE FROM comments WHERE id = ? AND userId = ?', [req.params.id, req.userId], (error, response) => {
+        mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', response[0].postId, (error, response) => {
             if (error) {res.status(500).json({error})}
             else {
-                mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', req.params.id, (error, response) => {
-                    if (error) {res.status(500).json({error})}
-                    else res.status(200).json({message: "Comment delete"})
+                mysql.query('DELETE FROM comments WHERE id = ?', [req.params.id], (error, response) => {
+                if (error) {res.status(500).json({error})}
+                    else res.status(201).json({message: "Comment created"})
                 })
             }
         })

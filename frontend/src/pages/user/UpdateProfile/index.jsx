@@ -132,7 +132,7 @@ function UpdateProfile() {
                     <Info>
                         <Div>
                             <label htmlFor="bio">Bio :</label>
-                            <Input placeholder='Write something...' id='bio' value={bio} {...register('bio', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-:]{1,}$/, onChange: (event) => { setBio(event.target.value) }
+                            <Input placeholder='Write something...' id='bio' value={bio} {...register('bio', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-,?)!-(:+]{1,}$/, onChange: (event) => { setBio(event.target.value) }
                             })} />
                         </Div>
                         {errors.bio && <span>Write something</span>}

@@ -101,14 +101,8 @@ export function OnePost({ userId, username, date, picture, description, likes, d
             setLikeActive(false)
             setLike(like - 1)
         } else {
-            if (like >= 1) {
-                setLikeActive(false)
-                setLike(like - 1)
-            } else {
-                setLikeActive(true)
-                setLike(like + 1)
-
-            }
+            setLikeActive(true)
+            setLike(like + 1)
         }
     };
 
@@ -117,13 +111,8 @@ export function OnePost({ userId, username, date, picture, description, likes, d
             setDislikeActive(false)
             setDislike(dislike - 1)
         } else {
-            if (dislike >= 1) {
-                setDislikeActive(false)
-                setDislike(dislike - 1)
-            } else {
-                setDislikeActive(true)
-                setDislike(dislike + 1)
-            }
+            setDislikeActive(true)
+            setDislike(dislike + 1)
         }
 
     };
@@ -195,30 +184,30 @@ export function OnePost({ userId, username, date, picture, description, likes, d
                 {dislikeActive === true ? (
                     <>
                         <FontAwesomeIcon aria-hidden="false" role="img"  icon={faThumbsUp} size="xl"  />
-                        <p>{like}</p>
+                        <p>{likes}</p>
                     </>
                 ) : (
                     <>
                         <FontAwesomeIcon aria-hidden="false" role="img" className="liked" icon={faThumbsUp} size="xl" onClick={liked} />
-                        <p>{like}</p>
+                        <p>{likes}</p>
                     </>
                 ) }
                 {likeActive === true ? (
                     <>
-                        <FontAwesomeIcon aria-hidden="false" role="img"   icon={faThumbsDown} size="xl" />
-                        <p>{dislike}</p>
+                        <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsDown} size="xl" />
+                        <p>{dislikes}</p>
                     </>
                 ) : (
                     <>
                         <FontAwesomeIcon aria-hidden="false" role="img" className="disliked" icon={faThumbsDown} size="xl" onClick={disliked} />
-                        <p>{dislike}</p>
+                        <p>{dislikes}</p>
                     </>
                 ) }
             </LikeContainer>
             <Form onSubmit={handleSubmit(createComment)}>
                 <label htmlFor="comment">Post a comment</label>
                 <Comment type="text" placeholder='Comments...' id="comment"
-                {...register('comment', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-]{1,}$/})}/>
+                {...register('comment', {required: true, pattern: /^[A-Za-z][0-9A-Za-z '-,?)!-(:+]{1,}$/})}/>
                 <button className="borderBtn" type="submit">Comment</button>
             </Form>
             {errors.comment && <span>Write a comment</span>}

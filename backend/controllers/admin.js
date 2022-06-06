@@ -87,14 +87,17 @@ exports.deleteComments = (req, res, next) => {
         if (error) {res.status(500).json({error})}
         if (response == []) {res.status(404).json({error : "Unauthorized request !"})}
         else {
-            mysql.query('DELETE FROM comments WHERE id = ?', [req.params.id], (error, response) => {
+            mysql.query('SELECT * FROM comments WHERE id = ?', req.params.id, (error, response) => {
                 if (error) {res.status(500).json({error})}
-                else {
-                    mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', req.params.id, (error, response) => {
+                mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', response[0].postId, (error, response) => {
+                    if (error) {res.status(500).json({error})}
+                    else {
+                        mysql.query('DELETE FROM comments WHERE id = ?', [req.params.id], (error, response) => {
                         if (error) {res.status(500).json({error})}
-                        else res.status(200).json({message: "Comment delete"})
-                    })
-                }
+                            else res.status(201).json({message: "Comment created"})
+                        })
+                    }
+                })
             })
         }
     })
