@@ -7,6 +7,7 @@ module.exports = (req, res, next) => {
         const userId = decodedToken.userId;
         const username = decodedToken.username;
         const adminId = decodedToken.adminId;
+        const isAdmin = decodedToken.isAdmin;
         req.auth = { userId };
         if (req.body.userId && req.body.userId !== userId) {
             throw "Invalid user ID";
@@ -14,6 +15,7 @@ module.exports = (req, res, next) => {
             req.userId = userId;
             req.username = username;
             req.adminId = adminId;
+            req.isAdmin = isAdmin
             next();
         }
     }

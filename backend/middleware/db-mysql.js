@@ -2,10 +2,11 @@ const mysql = require('mysql');
 
 console.log('Get connection ...');
 const db = mysql.createConnection({
-    database: process.env.DB, 
-    host: process.env.HOST, 
-    user: process.env.USERDB, 
-    password: process.env.PASSWORD
+    database: process.env.DB,
+    host: process.env.HOST,
+    user: process.env.USERDB,
+    password: process.env.PASSWORD,
+    timezone: 'Europe/Paris'
 })
 db.connect((err) =>{
     if (err) throw err;

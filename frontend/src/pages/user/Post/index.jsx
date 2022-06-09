@@ -48,8 +48,6 @@ function Post() {
                         date={post.date}
                         picture={post.image}
                         description={post.description}
-                        likes={post.likes}
-                        dislikes={post.dislikes}
                     />
                 ))}
                 {commentList.map((comment) => (

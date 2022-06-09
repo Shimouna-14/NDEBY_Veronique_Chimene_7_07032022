@@ -11,7 +11,7 @@ exports.login = (req, res, next) => {
         .then((valid) => {
             if (!valid) {res.status(401).json({error: "Password incorrect !"})}
             else {
-                const token = jwt.sign({adminId: response[0].id, username: response[0].username}, "RANDOM_TOKEN_SECRET", {expiresIn: "24h"})
+                const token = jwt.sign({adminId: response[0].id, username: response[0].username, isAdmin: true}, "RANDOM_TOKEN_SECRET", {expiresIn: "24h"})
                 res.status(200).json({adminId: response[0].id, username: response[0].username, token})
             }
         })
@@ -23,7 +23,7 @@ exports.logout = (req, res) => {
 };
 
 exports.allPost = (req, res, next) => {
-    mysql.query('SELECT * FROM post', (error, response) => {
+    mysql.query('SELECT * FROM post ORDER BY `date` asc', (error, response) => {
         if (error) {res.status(500).json({error})}
         else res.status(200).json(
             response.map((response) => {
@@ -48,7 +48,6 @@ exports.onePost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
     mysql.query('SELECT * FROM admin WHERE id = ?', req.adminId, (error, response) => {
         if (error) {res.status(500).json({error})}
-        if (response.length == []) {res.status(401).json({error : "Unauthorized request !"})}
         else {
             mysql.query('SELECT * FROM post WHERE id = ?', req.params.id, (error, response) => {
                 if (error) {res.status(500).json({error})}
@@ -85,7 +84,6 @@ exports.comments = (req, res, next) => {
 exports.deleteComments = (req, res, next) => {
     mysql.query('SELECT * FROM admin WHERE id = ?', req.adminId, (error, response) => {
         if (error) {res.status(500).json({error})}
-        if (response == []) {res.status(404).json({error : "Unauthorized request !"})}
         else {
             mysql.query('SELECT * FROM comments WHERE id = ?', req.params.id, (error, response) => {
                 if (error) {res.status(500).json({error})}
@@ -112,7 +110,7 @@ exports.oneProfile = (req, res, next) => {
 };
 
 exports.postProfile = (req, res, next) => {
-    mysql.query('SELECT * FROM post WHERE userId = ?', req.params.id, (error, response) => {
+    mysql.query('SELECT * FROM post WHERE userId = ? ORDER BY `date` asc', req.params.id, (error, response) => {
         if (error) {res.status(500).json({error})}
         else res.status(200).json(response.map( (response) => {
             if (response.image) {response.image = response.image.toString('utf8')}
@@ -124,7 +122,6 @@ exports.postProfile = (req, res, next) => {
 exports.deleteProfile = (req, res, next) => {
     mysql.query('SELECT * FROM admin WHERE id = ?', req.adminId, (error, response) => {
         if (error) {res.status(500).json({error})}
-        if (response.length == []) {res.status(404).json({error : "Unauthorized request !"})}
         else {
             mysql.query('DELETE FROM user WHERE id = ?', req.params.id, (error, response) => {
                 if (error) {res.status(500).json({error})}

@@ -2,8 +2,12 @@ const mysql = require("../middleware/db-mysql")
 const fs = require("fs");
 const { v4: uuidv4 } = require('uuid');
 
+let date = new Date()
+date.setHours(date.getHours() + 2);
+const current_date = date.toJSON().slice(0, 19).replace('T', ' ');
+
 exports.allPost = (req, res, next) => {
-    mysql.query('SELECT * FROM post', (error, response) => {
+    mysql.query('SELECT * FROM post ORDER BY date asc', (error, response) => {
         if (error) {res.status(500).json({error})}
         else res.status(200).json(response.map((response) => {
             if (response.image) {response.image = response.image.toString('utf8')}
@@ -13,26 +17,21 @@ exports.allPost = (req, res, next) => {
 };
 
 exports.createPost = (req, res, next) => {
-    mysql.query('SELECT id FROM admin', (error, response) => {
-        if (error) {res.status(500).json({message: error})}
-        else {
-            if (!req.body.description) {{res.status(400).json({message : "Write something in the description !"})}}
-            else {
-                if (req.file) {
-                    let image = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-                    mysql.query('INSERT INTO post (id, image, description, userId, username, requestId, date) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), image, req.body.description, req.userId, req.username, response[0].id, Date()], (error, response) => {
-                        if (error) {res.status(500).json({error})}
-                        else res.status(201).json({message: "Post created"})
-                    })
-                } else {
-                    mysql.query('INSERT INTO post (id, description, userId, username, requestId, date) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.body.description, req.userId, req.username, response[0].id, Date()], (error, response) => {
-                        if (error) {res.status(500).json({error})}
-                        else res.status(201).json({message: "Post created"})
-                    })
-                }
-            }
+    if (!req.body.description) {{res.status(400).json({message : "Write something in the description !"})}}
+    else {
+        if (req.file) {
+            let image = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+            mysql.query('INSERT INTO post (id, image, description, userId, username, date) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP() + 2)', [uuidv4(), image, req.body.description, req.userId, req.username, current_date], (error, response) => {
+                if (error) {res.status(500).json({error})}
+                else res.status(201).json({message: "Post created"})
+            })
+        } else {
+            mysql.query('INSERT INTO post (id, description, userId, username, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP() + 2)', [uuidv4(), req.body.description, req.userId, req.username, current_date], (error, response) => {
+                if (error) {res.status(500).json({error})}
+                else res.status(201).json({message: "Post created"})
+            })
         }
-    })
+    }
 };
 
 exports.onePost = (req, res, next) => {
@@ -50,7 +49,7 @@ exports.modifyPost = (req, res, next) => {
     mysql.query('SELECT * FROM post WHERE id = ?', req.params.id, (error, response) => {
         if (error) {res.status(500).json({error})}
         if (!req.body.description) {{res.status(400).json({message : "Write something in the description !"})}}
-        else {
+            else {
             mysql.query('UPDATE post SET description = ? WHERE id = ?', [req.body.description, req.params.id], (error, response) => {
                 if (error) {res.status(500).json({error})}
                 else res.status(200).json({message : "Post updated"})
@@ -62,6 +61,9 @@ exports.modifyPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
     mysql.query('SELECT * FROM post WHERE id = ?', req.params.id, (error, response) => {
         if (error) {res.status(500).json({error})}
+        if (response[0].userId != req.userId && req.isAdmin == false) {
+            return res.status(403).json()
+        }
         else {
             if (response[0].image) {
                 let image = response[0].image.toString()
@@ -82,57 +84,6 @@ exports.deletePost = (req, res, next) => {
     })
 };
 
-exports.likePost = (req, res, next) => {
-    if (req.body.likes == 1) {
-        mysql.query('SELECT * FROM dislikes WHERE userId = ? AND postId = ?', [req.userId, req.params.id], (error, response) => {
-            if (response.length == []) {
-                mysql.query('INSERT INTO likes (id, postId, userId, username, date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.userId, req.username, Date()], (error, response) => {
-                    if (error) {res.status(500).json({error})}
-                    mysql.query('UPDATE post SET likes = likes + 1 WHERE id = ?', req.params.id, (error, response) => {
-                        if (error) {res.status(500).json({error})}
-                        else res.status(201).json({message : "Post liked !"})
-                    })
-                })
-            }
-            else {res.status(400).json({message: "You already like this post !"})}
-        })
-    };
-
-    if (req.body.likes == 0) {
-        mysql.query('DELETE FROM likes WHERE userId = ? AND postId = ?', [req.userId, req.params.id], (error, response) => {
-            if (error) {res.status(500).json({error})}
-            mysql.query('UPDATE post SET likes = likes - 1 WHERE id = ?', req.params.id, (error, response) => {
-                if (error) {res.status(500).json({error})}
-                else res.status(200).json({message : "Like removed!"})
-            })
-        })
-    };
-
-    if (req.body.dislikes == -1) {
-        mysql.query('SELECT * FROM likes WHERE userId = ? AND postId = ?', [req.userId, req.params.id], (error, response) => {
-            if (response.length == []) {
-                mysql.query('INSERT INTO dislikes (id, postId, userId, username, date)  VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.userId, req.username, Date()], (error, response) => {
-                    if (error) {res.status(500).json({error})}
-                    mysql.query('UPDATE post SET dislikes = dislikes + 1 WHERE id = ?', req.params.id, (error, response) => {
-                        if (error) {res.status(500).json({error})}
-                        else res.status(201).json({message : "Post disliked !"})
-                    })
-                })
-            } else {res.status(400).json({message: "You already dislike this post !"})}
-        })
-    };
-
-    if (req.body.dislikes == 0) {
-        mysql.query('DELETE FROM dislikes WHERE userId = ? AND postId = ?', [req.userId, req.params.id], (error, response) => {
-            if (error) {res.status(500).json({error})}
-            mysql.query('UPDATE post SET dislikes = dislikes - 1 WHERE id = ?', req.params.id, (error, response) => {
-                if (error) {res.status(500).json({error})}
-                else res.status(200).json({message : "Dislike removed!"})
-            })
-        })
-    };
-};
-
 exports.comments = (req, res, next) => {
     mysql.query('SELECT * FROM comments WHERE postId = ?', req.params.id, (error, response) => {
         if (error) {res.status(500).json({error})}
@@ -141,35 +92,32 @@ exports.comments = (req, res, next) => {
 };
 
 exports.postComments = (req, res, next) => {
-    mysql.query('SELECT id FROM admin', (error, response) => {
-        if (error) {res.status(500).json({message: error})}
-        else {
-            if (req.body.comment == "") {{res.status(400).json({message : "Write something in the comment !"})}}
-            else {
-                mysql.query('INSERT INTO comments (id, postId, username, userId, comment, requestId, date) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.username, req.userId, req.body.comment, response[0].id, Date()], (error, response) => {
-                    if (error) {res.status(500).json({error})}
-                    mysql.query('UPDATE post SET comments = comments + 1 WHERE id = ?', req.params.id, (error, response) => {
-                        if (error) {res.status(500).json({error})}
-                        else res.status(201).json({message: "Comment created"})
-                    })
-                })
-            }
-        }
-    })
-
+    if (req.body.comment == "") {{res.status(400).json({message : "Write something in the comment !"})}}
+    else {
+        mysql.query('INSERT INTO comments (id, postId, username, userId, comment, date) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP())', [uuidv4(), req.params.id, req.username, req.userId, req.body.comment, current_date], (error, response) => {
+            if (error) {res.status(500).json({error})}
+            mysql.query('UPDATE post SET comments = comments + 1 WHERE id = ?', req.params.id, (error, response) => {
+                if (error) {res.status(500).json({error})}
+                else res.status(201).json({message: "Comment created"})
+            })
+        })
+    }
 };
 
 exports.deleteComments = (req, res, next) => {
     mysql.query('SELECT * FROM comments WHERE id = ?', req.params.id, (error, response) => {
         if (error) {res.status(500).json({error})}
-        mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', response[0].postId, (error, response) => {
+        if (response[0].userId != req.userId && user.isAdmin == false) { return res.status(403).json() }
+        else {
+            mysql.query('UPDATE post SET comments = comments - 1 WHERE id = ?', response[0].postId, (error, response) => {
             if (error) {res.status(500).json({error})}
-            else {
-                mysql.query('DELETE FROM comments WHERE id = ?', [req.params.id], (error, response) => {
-                if (error) {res.status(500).json({error})}
-                    else res.status(201).json({message: "Comment created"})
-                })
-            }
-        })
+                else {
+                    mysql.query('DELETE FROM comments WHERE id = ?', [req.params.id], (error, response) => {
+                    if (error) {res.status(500).json({error})}
+                        else res.status(201).json({message: "Comment created"})
+                    })
+                }
+            })
+        }
     })
 };

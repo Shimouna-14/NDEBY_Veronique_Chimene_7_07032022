@@ -60,6 +60,7 @@ const CenterImg = styled.div`
 const Form = styled.form`
     display: flex;
     justify-content: space-around;
+    margin-top: 10px;
 `
 
 const Comment = styled.input`
@@ -73,71 +74,17 @@ const Comment = styled.input`
         width: 75%;
     }
 `
-const LikeContainer = styled.div`
-    display: flex;
-    width: 155px;
-    justify-content: space-between;
-    align-items: center;
-`
 
-export function OnePost({ userId, username, date, picture, description, likes, dislikes }) {
+export function OnePost({ userId, username, date, picture, description}) {
     const { id: postId } = useParams()
     let userData = JSON.parse(localStorage.getItem("userData"))
     let token = JSON.parse(localStorage.getItem("jwt_G"))
-    const [likeActive, setLikeActive] = useState(false)
-    const [dislikeActive, setDislikeActive] = useState(false)
-    const [like, setLike] = useState(likes)
-    const [dislike, setDislike] = useState(dislikes)
+
     const deleted = () => {
         Axios.delete(`http://localhost:8000/api/home/status/${postId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
         .then(() => window.location = "/home")
-        .catch((error) => console.log(error))
-    };
-
-    function handleLike() {
-        if (likeActive) {
-            setLikeActive(false)
-            setLike(like - 1)
-        } else {
-            setLikeActive(true)
-            setLike(like + 1)
-        }
-    };
-
-    function handleDislike() {
-        if (dislikeActive) {
-            setDislikeActive(false)
-            setDislike(dislike - 1)
-        } else {
-            setDislikeActive(true)
-            setDislike(dislike + 1)
-        }
-
-    };
-
-    const liked = () => {
-        Axios.post(`http://localhost:8000/api/home/status/${postId}/like`, {
-            likes: like ? 0 : 1
-        }, {
-            headers: {
-                'Authorization': `token ${token}`
-            }
-        })
-        .then(() => handleLike())
-        .catch((error) => console.log(error))
-    };
-
-    const disliked = () => {
-        Axios.post(`http://localhost:8000/api/home/status/${postId}/like`, {
-            dislikes: dislike ? 0 : -1
-        }, {
-            headers: {
-                'Authorization': `token ${token}`
-            }
-        })
-        .then(() => handleDislike())
         .catch((error) => console.log(error))
     };
 
@@ -180,30 +127,6 @@ export function OnePost({ userId, username, date, picture, description, likes, d
             </Div>
             <p>{description}</p>
             { picture ? (<CenterImg><img className='post-img' src={picture} alt="Post picture"/></CenterImg>) : (null)}
-            <LikeContainer>
-                {dislikeActive === true ? (
-                    <>
-                        <FontAwesomeIcon aria-hidden="false" role="img"  icon={faThumbsUp} size="xl"  />
-                        <p>{likes}</p>
-                    </>
-                ) : (
-                    <>
-                        <FontAwesomeIcon aria-hidden="false" role="img" className="liked" icon={faThumbsUp} size="xl" onClick={liked} />
-                        <p>{likes}</p>
-                    </>
-                ) }
-                {likeActive === true ? (
-                    <>
-                        <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsDown} size="xl" />
-                        <p>{dislikes}</p>
-                    </>
-                ) : (
-                    <>
-                        <FontAwesomeIcon aria-hidden="false" role="img" className="disliked" icon={faThumbsDown} size="xl" onClick={disliked} />
-                        <p>{dislikes}</p>
-                    </>
-                ) }
-            </LikeContainer>
             <Form onSubmit={handleSubmit(createComment)}>
                 <label htmlFor="comment">Post a comment</label>
                 <Comment type="text" placeholder='Comments...' id="comment"
@@ -220,9 +143,7 @@ OnePost.prototype = {
     username: PropTypes.string.isRequired,
     date: PropTypes.instanceOf(Date).isRequired,
     picture: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    like: PropTypes.number.isRequired,
-    dislike: PropTypes.number.isRequired
+    description: PropTypes.string.isRequired
 }
 
 OnePost.defaultProps = {
@@ -230,12 +151,10 @@ OnePost.defaultProps = {
     username: "",
     date: "",
     picture: "",
-    description: "",
-    like: 0,
-    dislike: 0
+    description: ""
 }
 
-export function OnePostAdmin({ userId, username, date, picture, description, like, dislike }) {
+export function OnePostAdmin({ userId, username, date, picture, description}) {
     const { id: postId } = useParams()
     let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
 
@@ -268,12 +187,6 @@ export function OnePostAdmin({ userId, username, date, picture, description, lik
             { picture ? (
                 <CenterImg><img className='post-img' src={picture} alt="Post picture"/></CenterImg>
             ) : (null)}
-            <LikeContainer>
-                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsUp} size="xl" />
-                <p>{like}</p>
-                <FontAwesomeIcon aria-hidden="false" role="img" icon={faThumbsDown} size="xl" />
-                <p>{dislike}</p>
-            </LikeContainer>
         </Publication>
     )
 };
@@ -283,9 +196,7 @@ OnePostAdmin.prototype = {
     username: PropTypes.string.isRequired,
     date: PropTypes.instanceOf(Date).isRequired,
     picture: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    like: PropTypes.number.isRequired,
-    dislike: PropTypes.number.isRequired
+    description: PropTypes.string.isRequired
 }
 
 OnePostAdmin.defaultProps = {
@@ -293,7 +204,5 @@ OnePostAdmin.defaultProps = {
     username: "",
     date: "",
     picture: "",
-    description: "",
-    like: 0,
-    dislike: 0
+    description: ""
 }

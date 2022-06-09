@@ -29,7 +29,7 @@ function Profile({ username, bio }) {
         .catch((error) => console.log(error))
     }
 
-    return token ?  (
+    return(
         <>
             <Profil>
             <FontAwesomeIcon aria-hidden="false" role="img"  className='userPost' icon={faUserCircle} size="5x" />
@@ -37,19 +37,12 @@ function Profile({ username, bio }) {
                     <h1>{username}</h1>
                     <p>{bio}</p>
                 </UserProfile>
-                <FontAwesomeIcon aria-hidden="false" role="img" icon={faTrash} onClick={deleted} size="lg" />
+                { token ? (
+                    <FontAwesomeIcon aria-hidden="false" role="img" icon={faTrash} onClick={deleted} size="lg" />
+                ) : null}
             </Profil>
         </>
-    ) : (
-        <>
-            <Profil>
-            <FontAwesomeIcon aria-hidden="false" role="img" className='userPost' icon={faUserCircle} size="5x" />
-                <UserProfile>
-                    <h1>{username}</h1>
-                    <p>{bio}</p>
-                </UserProfile>
-            </Profil>
-        </>
+
     )
 };
 

@@ -38,10 +38,9 @@ function App() {
                 <Route path='/status/:id'>
                     <Post />
                 </Route>
-                <Route
-                    path='/update/:id'
-                    render={(props) => <UpdatePost {...props} />}
-                />
+                <Route path='/update/:id'>
+                    <UpdatePost />
+                </Route>
                 <Route path='/profile/:id'>
                     <Profile />
                 </Route>
