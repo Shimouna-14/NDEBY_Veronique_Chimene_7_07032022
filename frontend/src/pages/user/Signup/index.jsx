@@ -10,9 +10,10 @@ import { useState } from 'react'
 function Signup() {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [error, setError] = useState(false)
+    const apiUrl = process.env.REACT_APP_API_URL; 
 
     const sign = (data) => {
-        Axios.post('http://localhost:8000/api/auth/signup', {
+        Axios.post(`${apiUrl}/auth/signup`, {
             username: data.username,
             email: data.email,
             password: data.password

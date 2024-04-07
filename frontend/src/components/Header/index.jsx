@@ -98,13 +98,14 @@ const Logout = styled(Link)`
     display: flex;
     flex-direction: column;
 `
+const apiUrl = process.env.REACT_APP_API_URL; 
 
 export function UserHeader() {
     const [isOpen, setIsOpen] = useState(true)
     let userData = JSON.parse(localStorage.getItem("userData"))
 
     const logout = () => {
-        Axios.get('http://localhost:8000/api/auth/logout')
+        Axios.get(`${apiUrl}/auth/logout`)
         .then(() => localStorage.clear() )
         .then(() => window.location = "/auth/login")
         .catch((error) => console.log(error))
@@ -145,7 +146,7 @@ export function UserHeader() {
 
 export function AdminHeader() {
     const logout = () => {
-        Axios.get('http://localhost:8000/api/admin/logout')
+        Axios.get(`${apiUrl}/admin/logout`)
         .then(() => localStorage.clear() )
         .then(() => window.location = "/admin/auth/login")
         .catch((error) => console.log(error))

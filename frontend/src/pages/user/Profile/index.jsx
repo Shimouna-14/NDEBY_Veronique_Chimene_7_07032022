@@ -40,10 +40,10 @@ const AllPost = styled.div`
 function Profile() {
     const { id: userId } = useParams()
     let token = JSON.parse(localStorage.getItem("jwt_G"))
-
+    const apiUrl = process.env.REACT_APP_API_URL; 
     const [profile, setProfile] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/profile/${userId}`, {
+        fetch(`${apiUrl}/profile/${userId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())
@@ -53,7 +53,7 @@ function Profile() {
 
     const [postList, setPostList] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/profile/status/${userId}`, {
+        fetch(`${apiUrl}/profile/status/${userId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())

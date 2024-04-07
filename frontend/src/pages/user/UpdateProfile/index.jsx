@@ -89,7 +89,7 @@ const Button = styled.button`
     align-items: center;
     font-weight: 600;
 `
-
+const apiUrl = process.env.REACT_APP_API_URL; 
 
 function UpdateProfile() {
     let token = JSON.parse(localStorage.getItem("jwt_G"))
@@ -99,7 +99,7 @@ function UpdateProfile() {
     let [bio, setBio] = useState("")
 
     useEffect(() => {
-        fetch(`http://localhost:8000/api/profile/${userId}`, {
+        fetch(`${apiUrl}/profile/${userId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())
@@ -112,7 +112,7 @@ function UpdateProfile() {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
     const updateProfile = (data) => {
-        Axios.put(`http://localhost:8000/api/profile/${userId}`, {
+        Axios.put(`${apiUrl}/profile/${userId}`, {
             bio: data.bio
         } , {
             headers: { 'Authorization': `token ${token}` }

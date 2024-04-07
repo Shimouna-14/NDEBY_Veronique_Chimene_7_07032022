@@ -26,13 +26,14 @@ const CommentContainer = styled.div`
 const Content = styled.div`
     width: 95%;
 `
+const apiUrl = process.env.REACT_APP_API_URL; 
 
 export function ContainerComment({comment, userId, username, commentId}) {
     let token = JSON.parse(localStorage.getItem("jwt_G"))
     let userData = JSON.parse(localStorage.getItem("userData"))
 
     const deleted = () => {
-        Axios.delete(`http://localhost:8000/api/home/comments/${commentId}`, {
+        Axios.delete(`${apiUrl}/home/comments/${commentId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
         .then(() => window.location.reload())
@@ -72,7 +73,7 @@ export function ContainerAdminComment({comment, userId, username, commentId}) {
     let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
 
     const deleted = () => {
-        Axios.delete(`http://localhost:8000/api/admin/comments/${commentId}`, {
+        Axios.delete(`${apiUrl}/admin/comments/${commentId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
         .then(() => window.location.reload())

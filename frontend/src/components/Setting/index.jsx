@@ -96,13 +96,15 @@ const BtnDelete = styled(Link)`
     font-weight: 600;
 `
 
+const apiUrl = process.env.REACT_APP_API_URL; 
+
 function Setting({ username, bio, email, date }) {
     let token = JSON.parse(localStorage.getItem("jwt_G"))
     let userData = JSON.parse(localStorage.getItem("userData"))
     let userId = userData.userId
 
     const deleted = () => {
-        Axios.delete(`http://localhost:8000/api/profile/${userId}`, {
+        Axios.delete(`${apiUrl}/profile/${userId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
         .then(() => localStorage.clear() )

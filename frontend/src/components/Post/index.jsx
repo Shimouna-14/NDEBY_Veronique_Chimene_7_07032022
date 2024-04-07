@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faThumbsUp, faThumbsDown, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom';
-import { useState } from "react";
 import Axios from "axios";
 import { useForm } from 'react-hook-form'
 
@@ -75,13 +74,15 @@ const Comment = styled.input`
     }
 `
 
+const apiUrl = process.env.REACT_APP_API_URL; 
+
 export function OnePost({ userId, username, date, picture, description}) {
     const { id: postId } = useParams()
     let userData = JSON.parse(localStorage.getItem("userData"))
     let token = JSON.parse(localStorage.getItem("jwt_G"))
 
     const deleted = () => {
-        Axios.delete(`http://localhost:8000/api/home/status/${postId}`, {
+        Axios.delete(`${apiUrl}/home/status/${postId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
         .then(() => window.location = "/home")
@@ -90,7 +91,7 @@ export function OnePost({ userId, username, date, picture, description}) {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
     const createComment = (data) => {
-        Axios.post(`http://localhost:8000/api/home/status/${postId}/comments`, {
+        Axios.post(`${apiUrl}/home/status/${postId}/comments`, {
             comment: data.comment
         }, {
             headers: {
@@ -159,7 +160,7 @@ export function OnePostAdmin({ userId, username, date, picture, description}) {
     let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
 
     const deleted = () => {
-        Axios.delete(`http://localhost:8000/api/admin/status/${postId}`, {
+        Axios.delete(`${apiUrl}/admin/status/${postId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
         .then(() => window.location = "/admin/home")

@@ -15,10 +15,10 @@ const Main = styled.main`
 function Post() {
     const { id: postId } = useParams()
     let token = JSON.parse(localStorage.getItem("jwt_G"))
-
+    const apiUrl = process.env.REACT_APP_API_URL; 
     const [postData, setPostData] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/home/status/${postId}`, {
+        fetch(`${apiUrl}/home/status/${postId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())
@@ -28,7 +28,7 @@ function Post() {
 
     const [commentList, setcommentList] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/home/status/${postId}/comments`, {
+        fetch(`${apiUrl}/home/status/${postId}/comments`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())

@@ -112,8 +112,10 @@ const AllPost = styled.div`
 function Home() {
     let token = JSON.parse(localStorage.getItem("jwt_G"))
     const [postList, setPostList] = useState([])
+    const apiUrl = process.env.REACT_APP_API_URL; 
+
     useEffect(() => {
-        fetch('http://localhost:8000/api/home', {
+        fetch(`${apiUrl}/home`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())
@@ -127,7 +129,7 @@ function Home() {
         const formData = new FormData();
         formData.append("image", image)
         formData.append("description", data.description)
-        Axios.post('http://localhost:8000/api/home', formData, {
+        Axios.post(`${apiUrl}/home`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `token ${token}`
@@ -155,7 +157,6 @@ function Home() {
                                 <FontAwesomeIcon  aria-hidden="false" role="img" icon={faImage} size="2x"/>
                                 <input type="file" id='file' tabIndex="0" onChange={handleImage}/>
                                 <p>Select a image</p>
-
                             </Image>
                             <Button className="borderBtn" type="submit">Post</Button>
                         </Form>

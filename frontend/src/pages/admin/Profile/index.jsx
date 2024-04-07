@@ -40,10 +40,10 @@ const AllPost = styled.div`
 function Profile() {
     const { id: userId } = useParams()
     let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
-
+    const apiUrl = process.env.REACT_APP_API_URL; 
     const [profile, setProfile] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/admin/profile/${userId}`, {
+        fetch(`${apiUrl}/admin/profile/${userId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())
@@ -53,7 +53,7 @@ function Profile() {
 
     const [postList, setPostList] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/admin/profile/status/${userId}`, {
+        fetch(`${apiUrl}/admin/profile/status/${userId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())

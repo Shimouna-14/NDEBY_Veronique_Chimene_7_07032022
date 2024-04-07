@@ -34,8 +34,9 @@ const AllPost = styled.div`
 function Home() {
     let token = JSON.parse(localStorage.getItem("jwt_G_admin"))
     const [postList, setPostList] = useState([])
+    const apiUrl = process.env.REACT_APP_API_URL; 
     useEffect(() => {
-        fetch('http://localhost:8000/api/admin/home', {
+        fetch(`${apiUrl}/admin/home`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())

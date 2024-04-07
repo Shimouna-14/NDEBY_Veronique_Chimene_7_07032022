@@ -14,10 +14,11 @@ const Main = styled.main`
 function Setting() {
     let { id: userId } = useParams()
     let token = JSON.parse(localStorage.getItem("jwt_G"))
+    const apiUrl = process.env.REACT_APP_API_URL; 
 
     const [profile, setProfile] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:8000/api/profile/${userId}`, {
+        fetch(`${apiUrl}/profile/${userId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
             .then((response) => response.json())

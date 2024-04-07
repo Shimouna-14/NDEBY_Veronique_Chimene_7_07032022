@@ -10,9 +10,9 @@ import { useState } from 'react'
 function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [error, setError] = useState(false)
-
+    const apiUrl = process.env.REACT_APP_API_URL; 
     const log = (data) => {
-        Axios.post('http://localhost:8000/api/admin/auth/login', {
+        Axios.post(`${apiUrl}/admin/auth/login`, {
             email: data.email,
             password: data.password
         })

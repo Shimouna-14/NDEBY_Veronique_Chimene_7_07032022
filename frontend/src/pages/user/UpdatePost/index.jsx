@@ -59,6 +59,8 @@ const Button = styled.button`
     }
 `
 
+const apiUrl = process.env.REACT_APP_API_URL; 
+
 function UpdatePost() {
     const { id: postId } = useParams()
     let token = JSON.parse(localStorage.getItem("jwt_G"))
@@ -66,7 +68,7 @@ function UpdatePost() {
     let [description, setDescription] = useState("")
 
     useEffect(() => {
-        fetch(`http://localhost:8000/api/home/status/${postId}`, {
+        fetch(`${apiUrl}/home/status/${postId}`, {
             headers: { 'Authorization': `token ${token}` }
         })
         .then((response) => response.json())
@@ -79,7 +81,7 @@ function UpdatePost() {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
     const updatePost = (data) => {
-        Axios.put(`http://localhost:8000/api/home/status/${postId}`, {
+        Axios.put(`${apiUrl}/home/status/${postId}`, {
             description: data.description
         } , {
             headers: { 'Authorization': `token ${token}` }

@@ -6,13 +6,15 @@ import { Image, Sign, Icon, H1, H2, Form, Label, IconForm, Input, Button, Styled
 import Axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+    const apiUrl = process.env.REACT_APP_API_URL; 
 
 function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [error, setError] = useState(false)
+    const apiUrl = process.env.REACT_APP_API_URL; 
 
     const login = (data) => {
-        Axios.post('http://localhost:8000/api/auth/login', {
+        Axios.post(`${apiUrl}/auth/login`, {
             email: data.email,
             password: data.password
         })
